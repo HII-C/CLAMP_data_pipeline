@@ -4,12 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Arrays;
 
-import conditions.ConceptCondition;
-import conditions.ConditionIntf;
-import conditions.TokenCondition;
+import conditions.*;
 
 public class Parser {
     public String mFileName = "";
+    public int mSentenceId = 0;
 
     public static void main(String[] args) {
     	Parser parse = new Parser();
@@ -59,9 +58,12 @@ public class Parser {
         if( theConditionType.equals("NamedEntity") ) {
             theResCondition = new ConceptCondition(theSplitLine, theRecordId);
         } else if( theConditionType.equals("Sentence") ) {
-
+            theResCondition = new SentenceCondition(theSplitLine, theRecordId, mSentenceId);
+            mSentenceId++;
         } else if( theConditionType.equals("Token") ) {
             theResCondition = new TokenCondition(theSplitLine, theRecordId);
+        } else if( theConditionType.equals("Relation") ) {
+            theResCondition = new RelationCondition(theSplitLine, theRecordId);
         } else {
             System.out.println( "Unknown condition type: " + theSplitLine[0] );
         }
