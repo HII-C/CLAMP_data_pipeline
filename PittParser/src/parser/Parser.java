@@ -2,17 +2,23 @@ package parser;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Arrays;
 
 import conditions.ConceptCondition;
 import conditions.ConditionIntf;
+import conditions.TokenCondition;
 
 public class Parser {
     public String mFileName = "";
 
     public static void main(String[] args) {
     	Parser parse = new Parser();
-    	
-        parse.mFileName = args[1];
+
+    	String workingDirectory = System.getProperty("user.dir");
+    	System.out.println( "Current working directory: " + workingDirectory );
+
+        //parse.mFileName = args[1];
+        parse.mFileName = "PittParser\\example_data";
         parse.readFileByLine();
     }
 
@@ -43,9 +49,11 @@ public class Parser {
     }
 
     public ConditionIntf getConditionFromLine( String line ) {
-        String[] theSplitLine = ParsingUtils.splitByMinSpace( line, 5 );
+        String[] theSplitLine = ParsingUtils.splitByMinSpace( line, 3 );
         int theRecordId = 1;
-        
+
+        System.out.println(" The parse line is: " + Arrays.toString( theSplitLine ));
+
         String theConditionType = theSplitLine[0];
         ConditionIntf theResCondition = null;
         if( theConditionType.equals("NamedEntity") ) {
@@ -53,7 +61,7 @@ public class Parser {
         } else if( theConditionType.equals("Sentence") ) {
 
         } else if( theConditionType.equals("Token") ) {
-
+            theResCondition = new TokenCondition(theSplitLine, theRecordId);
         } else {
             System.out.println( "Unknown condition type: " + theSplitLine[0] );
         }

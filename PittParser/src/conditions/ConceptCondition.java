@@ -23,9 +23,11 @@ public class ConceptCondition implements ConditionIntf{
         parseParts(aParts, aRecordId);
     }
 
+    // Expected input
+    // e.g. NamedEntity     42      62      semantic=problem        assertion=present      ne=Difficulty breathing
     private void parseParts(String[] aParts, int aRecordId) {
         // validate that this entry is correct
-        if( !aParts[0].equals("namedEntity") ) {
+        if( !aParts[0].equals("NamedEntity") ) {
             printError("Type is incorrect: " + aParts[0]);
             return;
         }
