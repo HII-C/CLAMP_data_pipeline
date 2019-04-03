@@ -42,6 +42,14 @@ public class Parser {
 
     public void setDatabaseCredentials( String aUserName, String aPassword ) {
         ((DatabaseManager) mDatabaseManager ).setCredentials( aUserName, aPassword );
+
+        // test that it works
+        try {
+            mDatabaseManager.openConnection();
+            System.out.println("Connected to database~!");
+        } catch( Exception e ) {
+            e.printStackTrace();
+        }
     }
 
     public void startParsing() {
