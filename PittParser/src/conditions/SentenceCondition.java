@@ -12,7 +12,6 @@ public class SentenceCondition implements ConditionIntf {
     Integer mIndex1;
     Integer mIndex2;
 
-    String mSQLQuery;
     boolean mParsingErrorOccurred;
 
     // Methods

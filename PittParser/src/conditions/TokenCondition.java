@@ -12,7 +12,6 @@ public class TokenCondition implements ConditionIntf{
     int mCEnd;
     String pos;
 
-    String mSQLQuery;
     boolean mParsingErrorOccurred;
     boolean mHasSentenceIdSet;
 

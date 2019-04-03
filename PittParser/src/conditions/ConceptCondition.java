@@ -15,7 +15,6 @@ public class ConceptCondition implements ConditionIntf{
     int mType;
     int mAssertion;
 
-    String mSQLQuery;
     boolean mParsingErrorOccurred;
     boolean mHasSentenceIDSet;
 

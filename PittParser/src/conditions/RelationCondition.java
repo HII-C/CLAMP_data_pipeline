@@ -18,7 +18,6 @@ public class RelationCondition implements ConditionIntf {
     int mSentenceID1;
     int mSentenceID2;
 
-    String mSQLQuery;
     boolean mParsingErrorOccurred;
     boolean mHasSentenceIDSet;
 

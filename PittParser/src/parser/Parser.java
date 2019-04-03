@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import conditions.*;
+import mysql_interface.DatabaseManager;
+import mysql_interface.DatabaseManagerIntf;
 
 public class Parser {
     public String mFileName;
@@ -14,6 +16,7 @@ public class Parser {
     List<ConditionIntf> mConditions;
 
     private SentenceManager mSentenceManager;
+    private DatabaseManagerIntf mDatabaseManager;
 
     public static void main(String[] args) {
         String workingDirectory = System.getProperty("user.dir");
@@ -29,11 +32,17 @@ public class Parser {
         mFileName = aFileName;
         mSentenceManager = new SentenceManager();
         mConditions = new ArrayList<ConditionIntf>();
+        mDatabaseManager = DatabaseManager.getInstance();
     }
 
     public void startParsing() {
+        mDatabaseManager.openConnection();
+
         parseFileByLine();
         updateConditionsWithSentenceID();
+        runSQLQueries();
+
+        mDatabaseManager.closeConnection();
     }
 
     private void updateConditionsWithSentenceID() {
@@ -47,7 +56,7 @@ public class Parser {
             String theSQLQuery = currCondition.getSQLAddQuery();
             if( theSQLQuery.equals( "" ) ) continue;
 
-            // TODO: RUN QUERY HERE
+            mDatabaseManager.pushSqlQuery( theSQLQuery );
         }
     }
 
