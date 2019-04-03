@@ -22,8 +22,11 @@ public class Parser {
         String workingDirectory = System.getProperty("user.dir");
         System.out.println( "Current working directory: " + workingDirectory );
 
-        //parse.mFileName = args[1];
+        String userName = args[1];
+        String password = args[2];
+
         Parser parse = new Parser("PittParser\\example_data");
+        parse.setDatabaseCredentials( userName, password );
 
         parse.startParsing();
     }
@@ -33,6 +36,10 @@ public class Parser {
         mSentenceManager = new SentenceManager();
         mConditions = new ArrayList<ConditionIntf>();
         mDatabaseManager = DatabaseManager.getInstance();
+    }
+
+    public void setDatabaseCredentials( String aUserName, String aPassword ) {
+        ((DatabaseManager) mDatabaseManager ).setCredentials( aUserName, aPassword );
     }
 
     public void startParsing() {

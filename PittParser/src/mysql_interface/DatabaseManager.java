@@ -4,11 +4,13 @@ import java.sql.*;
 
 public class DatabaseManager implements DatabaseManagerIntf{
 
-	private static String CONNECTION_URL = "jdbc:mysql://db01.healthcreek.org";
-
+	private static String CONNECTION_URL = "jdbc:mysql://db01.healthcreek.org:3306/capstone";
 
 	private static DatabaseManager instance;
 	public Connection mConnection;
+
+	public String mUserName;
+	public String mPassword;
 
 	private DatabaseManager() {
 	}
@@ -21,6 +23,11 @@ public class DatabaseManager implements DatabaseManagerIntf{
 		return instance;
 	}
 
+	public void setCredentials( String aUserName, String aPassword ) {
+		mUserName = aUserName;
+		mPassword = aPassword;
+	}
+
 	@Override
 	public void openConnection() {
 
@@ -29,7 +36,7 @@ public class DatabaseManager implements DatabaseManagerIntf{
 				return;
 			}
 
-			mConnection = DriverManager.getConnection(CONNECTION_URL, System.getenv(""), System.getenv(""));
+			mConnection = DriverManager.getConnection(CONNECTION_URL, mUserName, mPassword);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -52,7 +59,7 @@ public class DatabaseManager implements DatabaseManagerIntf{
 	public void pushSqlQuery( String aQuery ) {
 		try {
 			Statement statement = mConnection.createStatement();
-			statement.executeQuery( aQuery );
+			//statement.executeQuery( aQuery );
 			statement.close();
 		} catch (Exception e) {
 			e.printStackTrace();
