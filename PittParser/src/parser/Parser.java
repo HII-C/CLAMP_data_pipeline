@@ -24,8 +24,8 @@ public class Parser {
 
         System.out.println( "These are the arguments: " + Arrays.toString( args ) );
 
-        String userName = args[1];
-        String password = args[2];
+        String userName = args[0];
+        String password = args[1];
 
         Parser parse = new Parser("PittParser\\example_data");
         parse.setDatabaseCredentials( userName, password );
