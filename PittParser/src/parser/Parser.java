@@ -43,10 +43,13 @@ public class Parser {
     public void setDatabaseCredentials( String aUserName, String aPassword ) {
         ((DatabaseManager) mDatabaseManager ).setCredentials( aUserName, aPassword );
 
-        // test that it works
+        // Connection test
         try {
             mDatabaseManager.openConnection();
-            System.out.println("Connected to database~!");
+            System.out.println("Connected to database test~!");
+
+            mDatabaseManager.closeConnection();
+            System.out.println("Disconnected from database test~!");
         } catch( Exception e ) {
             e.printStackTrace();
         }
