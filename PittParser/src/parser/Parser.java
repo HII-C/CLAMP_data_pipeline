@@ -22,6 +22,8 @@ public class Parser {
         String workingDirectory = System.getProperty("user.dir");
         System.out.println( "Current working directory: " + workingDirectory );
 
+        System.out.println( "These are the arguments: " + Arrays.toString( args ) );
+
         String userName = args[1];
         String password = args[2];
 
