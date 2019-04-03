@@ -1,6 +1,7 @@
 package conditions;
 
 import parser.ParsingUtils;
+import parser.SentenceManager;
 
 public class TokenCondition implements ConditionIntf{
 
@@ -13,6 +14,7 @@ public class TokenCondition implements ConditionIntf{
 
     String mSQLQuery;
     boolean mParsingErrorOccurred;
+    boolean mHasSentenceIdSet;
 
     // ConditionIntf
 
@@ -58,10 +60,22 @@ public class TokenCondition implements ConditionIntf{
 
     @Override
 	public String getSQLAddQuery() {
-        if( mParsingErrorOccurred ) {
-            return "";
+        if( mParsingErrorOccurred || !mHasSentenceIdSet) {
+            printError( "Requirements not satisfied for SQL query or error occurred");
         }
 
         return "mysqlquery";
+    }
+
+    @Override
+    public void updateSentenceID( SentenceManager aSentenceManager ) {
+        Integer sentenceID = aSentenceManager.retrieveSentenceRangeMatch(mCStart, mCEnd);
+        if( sentenceID == null || mParsingErrorOccurred ) {
+            printError( "Error Updating Sentence ID");
+            return;
+        }
+
+        mSentenceId = sentenceID;
+        mHasSentenceIdSet = true;
     }
 }

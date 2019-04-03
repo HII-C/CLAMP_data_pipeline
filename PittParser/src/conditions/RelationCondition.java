@@ -1,6 +1,7 @@
 package conditions;
 
 import parser.ParsingUtils;
+import parser.SentenceManager;
 
 public class RelationCondition implements ConditionIntf {
 
@@ -14,8 +15,12 @@ public class RelationCondition implements ConditionIntf {
     String mSemanticType1;
     String mSemanticType2;
 
+    int mSentenceID1;
+    int mSentenceID2;
+
     String mSQLQuery;
     boolean mParsingErrorOccurred;
+    boolean mHasSentenceIDSet;
 
     public RelationCondition( String[] aParts, int aRecordId ) {
         parseParts(aParts,aRecordId);
@@ -85,10 +90,26 @@ public class RelationCondition implements ConditionIntf {
 
     @Override
     public String getSQLAddQuery() {
-        if( mParsingErrorOccurred ) {
-            return "";
+        if( mParsingErrorOccurred || !mHasSentenceIDSet ) {
+            printError( "Requirements not satisfied for SQL query or error occurred");
         }
 
         return "mysqlquery";
+    }
+
+    @Override
+    public void updateSentenceID( SentenceManager aSentenceManager ) {
+        Integer leftSentenceID = aSentenceManager.retrieveSentenceRangeMatch(mLeftIndex1, mLeftIndex2);
+        Integer rightSentenceID = aSentenceManager.retrieveSentenceRangeMatch(mRightIndex1, mRightIndex2);
+
+        if( leftSentenceID == null || rightSentenceID == null || mParsingErrorOccurred ) {
+            printError( "Error Updating Sentence ID");
+            return;
+        }
+
+        mSentenceID1 = leftSentenceID;
+        mSentenceID2 = rightSentenceID;
+
+        mHasSentenceIDSet = true;
     }
 }

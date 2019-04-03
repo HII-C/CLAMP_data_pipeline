@@ -1,12 +1,13 @@
 package conditions;
 
 import parser.ParsingUtils;
+import parser.SentenceManager;
 
 public class ConceptCondition implements ConditionIntf{
 
     // Data
     int mRecordId;
-    int mLineNum;
+    int mSentenceId;
     String mConceptUID;
     int mIndex1;
     int mIndex2;
@@ -16,6 +17,7 @@ public class ConceptCondition implements ConditionIntf{
 
     String mSQLQuery;
     boolean mParsingErrorOccurred;
+    boolean mHasSentenceIDSet;
 
     // Methods
 
@@ -116,10 +118,22 @@ public class ConceptCondition implements ConditionIntf{
 
     @Override
     public String getSQLAddQuery() {
-        if( mParsingErrorOccurred ) {
-            return "";
+        if( mParsingErrorOccurred || !mHasSentenceIDSet ) {
+            printError( "Requirements not satisfied for SQL query or error occurred");
         }
 
         return "mysqlquery";
+    }
+
+    @Override
+    public void updateSentenceID( SentenceManager aSentenceManager ) {
+        Integer sentenceID = aSentenceManager.retrieveSentenceRangeMatch(mIndex1, mIndex2);
+        if( sentenceID == null || mParsingErrorOccurred ) {
+            printError( "Error Updating Sentence ID");
+            return;
+        }
+
+        mSentenceId = sentenceID;
+        mHasSentenceIDSet = true;
     }
 }

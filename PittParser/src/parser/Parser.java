@@ -2,26 +2,56 @@ package parser;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import conditions.*;
 
 public class Parser {
-    public String mFileName = "";
+    public String mFileName;
     public int mSentenceId = 0;
+    List<ConditionIntf> mConditions;
+
+    private SentenceManager mSentenceManager;
 
     public static void main(String[] args) {
-    	Parser parse = new Parser();
-
-    	String workingDirectory = System.getProperty("user.dir");
-    	System.out.println( "Current working directory: " + workingDirectory );
+        String workingDirectory = System.getProperty("user.dir");
+        System.out.println( "Current working directory: " + workingDirectory );
 
         //parse.mFileName = args[1];
-        parse.mFileName = "PittParser\\example_data";
-        parse.readFileByLine();
+        Parser parse = new Parser("PittParser\\example_data");
+
+        parse.startParsing();
     }
 
-    public void readFileByLine( ) {
+    public Parser( String aFileName ) {
+        mFileName = aFileName;
+        mSentenceManager = new SentenceManager();
+        mConditions = new ArrayList<ConditionIntf>();
+    }
+
+    public void startParsing() {
+        parseFileByLine();
+        updateConditionsWithSentenceID();
+    }
+
+    private void updateConditionsWithSentenceID() {
+        for( ConditionIntf condition : mConditions ) {
+            condition.updateSentenceID( mSentenceManager );
+        }
+    }
+
+    private void runSQLQueries() {
+        for( ConditionIntf currCondition : mConditions ) {
+            String theSQLQuery = currCondition.getSQLAddQuery();
+            if( theSQLQuery.equals( "" ) ) continue;
+
+            // TODO: RUN QUERY HERE
+        }
+    }
+
+    private void parseFileByLine( ) {
         String theLine = null;
 
         try {
@@ -33,11 +63,8 @@ public class Parser {
 
                 ConditionIntf theCondition = getConditionFromLine( theLine );
                 if( theCondition == null ) continue;
-                
-                String theSQLQuery = theCondition.getSQLAddQuery();
-                if( theSQLQuery.equals( "" ) ) continue;
 
-                // TODO: run this sql query
+                mConditions.add( theCondition );
             }
 
             bufferedReader.close();
@@ -47,7 +74,7 @@ public class Parser {
         }
     }
 
-    public ConditionIntf getConditionFromLine( String line ) {
+    private ConditionIntf getConditionFromLine( String line ) {
         String[] theSplitLine = ParsingUtils.splitByMinSpace( line, 3 );
         int theRecordId = 1;
 
@@ -59,7 +86,11 @@ public class Parser {
             theResCondition = new ConceptCondition(theSplitLine, theRecordId);
         } else if( theConditionType.equals("Sentence") ) {
             theResCondition = new SentenceCondition(theSplitLine, theRecordId, mSentenceId);
+
+            // unique case for sentences; want to use ranges and update other elements with the correct ranges with the manager
             mSentenceId++;
+            SentenceCondition castedSentenceCondition = (SentenceCondition) theResCondition;
+            mSentenceManager.addSentenceRange( ((SentenceCondition) theResCondition).getSentenceRange() );
         } else if( theConditionType.equals("Token") ) {
             theResCondition = new TokenCondition(theSplitLine, theRecordId);
         } else if( theConditionType.equals("Relation") ) {

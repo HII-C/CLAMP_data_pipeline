@@ -1,6 +1,7 @@
 package conditions;
 
 import parser.ParsingUtils;
+import parser.SentenceManager;
 
 public class SentenceCondition implements ConditionIntf {
 
@@ -8,8 +9,8 @@ public class SentenceCondition implements ConditionIntf {
     int mRecordId;
     int mSentenceId;
     String mSection;
-    int mIndex1;
-    int mIndex2;
+    Integer mIndex1;
+    Integer mIndex2;
 
     String mSQLQuery;
     boolean mParsingErrorOccurred;
@@ -18,6 +19,15 @@ public class SentenceCondition implements ConditionIntf {
 
     public SentenceCondition( String[] aParts, int aRecordId, int aSentenceId ) {
         parseParts( aParts, aRecordId, aSentenceId );
+    }
+
+    public int[] getSentenceRange() {
+        if( mIndex1 == null || mIndex2 == null ) {
+            return null;
+        }
+
+        int[] res = {mIndex1, mIndex2};
+        return res;
     }
 
     private void parseParts( String[] aParts, int aRecordId, int aSentenceId ) {
@@ -62,9 +72,14 @@ public class SentenceCondition implements ConditionIntf {
     @Override
     public String getSQLAddQuery() {
         if( mParsingErrorOccurred ) {
-            return "";
+            printError( "Requirements not satisfied for SQL query or error occurred");
         }
 
         return "mysqlquery";
+    }
+
+    @Override
+    public void updateSentenceID( SentenceManager aSentenceManager ) {
+        // no-op
     }
 }
