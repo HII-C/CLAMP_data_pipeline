@@ -27,6 +27,7 @@ public class Parser {
         String userName = args[0];
         String password = args[1];
 
+        // TODO: pass in the file path through args[2]; replace this
         Parser parse = new Parser("PittParser\\example_data");
         parse.setDatabaseCredentials( userName, password );
 
@@ -105,6 +106,8 @@ public class Parser {
 
     private ConditionIntf getConditionFromLine( String line ) {
         String[] theSplitLine = ParsingUtils.splitByMinSpace( line, 3 );
+
+        // TODO: extract the record ID from the filename
         int theRecordId = 1;
 
         System.out.println(" The parse line is: " + Arrays.toString( theSplitLine ));
