@@ -76,10 +76,12 @@ public class Parser {
 
     private void runSQLQueries() {
         for( ConditionIntf currCondition : mConditions ) {
-            String theSQLQuery = currCondition.getSQLAddQuery();
-            if( theSQLQuery.equals( "" ) ) continue;
+            List<String> theSQLQuery = currCondition.getSQLAddQuery();
 
-            mDatabaseManager.pushSqlQuery( theSQLQuery );
+            for( String theQuery : theSQLQuery ) {
+                if( theQuery.equals( "" ) ) continue;
+                mDatabaseManager.pushSqlQuery( theQuery );
+            }
         }
     }
 

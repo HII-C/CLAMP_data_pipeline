@@ -3,6 +3,9 @@ package conditions;
 import parser.ParsingUtils;
 import parser.SentenceManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TokenCondition implements ConditionIntf{
 
     // Data
@@ -58,12 +61,26 @@ public class TokenCondition implements ConditionIntf{
     }
 
     @Override
-	public String getSQLAddQuery() {
+	public List<String> getSQLAddQuery() {
+        List<String> theQueries = new ArrayList<String>();
+
         if( mParsingErrorOccurred || !mHasSentenceIdSet) {
             printError( "Requirements not satisfied for SQL query or error occurred");
+            return theQueries;
         }
 
-        return "mysqlquery";
+        theQueries.add( "INSERT INTO pos ( pos_text ) " +
+                        "SELECT " + pos + " " +
+                        "WHERE NOT EXISTS ( SELECT * FROM pos " +
+                                            "WHERE pos.pos_text = " + pos + ")");
+
+        theQueries.add( "INSERT INTO token " +
+                        "( record_id, sentence_id, c_start, c_end, pos_id )" +
+                        "VALUES ( " + mRecordId + "," + mSentenceId + "," + mCStart + "," + mCEnd  + ", pos.pos_id" +
+                        "FROM pos " +
+                        "WHERE pos.pos_text = " + pos );
+
+        return theQueries;
     }
 
     @Override

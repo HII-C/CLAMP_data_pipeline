@@ -3,6 +3,9 @@ package conditions;
 import parser.ParsingUtils;
 import parser.SentenceManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RelationCondition implements ConditionIntf {
 
     // Data
@@ -88,12 +91,15 @@ public class RelationCondition implements ConditionIntf {
     // ConditionIntf OVERRIDES
 
     @Override
-    public String getSQLAddQuery() {
+    public List<String> getSQLAddQuery() {
+        List<String> theSQLQueries = new ArrayList<String>();
+
         if( mParsingErrorOccurred || !mHasSentenceIDSet ) {
             printError( "Requirements not satisfied for SQL query or error occurred");
+            return theSQLQueries;
         }
 
-        return "mysqlquery";
+        return theSQLQueries;
     }
 
     @Override
