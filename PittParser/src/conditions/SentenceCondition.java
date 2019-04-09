@@ -26,8 +26,8 @@ public class SentenceCondition implements ConditionIntf {
     // Methods
 
     public SentenceCondition( String[] aParts, int aRecordId, int aSentenceId, String aUnparsedFileName ) {
-        parseParts( aParts, aRecordId, aSentenceId );
         mUnparsedFileName = aUnparsedFileName;
+        parseParts( aParts, aRecordId, aSentenceId );
     }
 
     public int[] getSentenceRange() {
@@ -78,8 +78,13 @@ public class SentenceCondition implements ConditionIntf {
     	try {
     		FileReader fileReader = new FileReader( mUnparsedFileName );
     		BufferedReader bufferedReader = new BufferedReader( fileReader );
-    		int count = mIndex1;
+    		int count = 0;
     		int intChar;
+    		
+    		while (count < mIndex1) {
+    			bufferedReader.read();
+    			count++;
+    		}
     		
     		while ( (intChar = bufferedReader.read()) != -1 && count < mIndex2) {
     			char ch = (char) intChar;
@@ -91,7 +96,7 @@ public class SentenceCondition implements ConditionIntf {
     			count++;
     		}
     		
-    		System.out.println(sentence);
+//    		System.out.println("Sentence: " + sentence);
     		bufferedReader.close();
     	}
     	catch ( Exception e ) {

@@ -28,8 +28,8 @@ public class Parser {
         String userName = args[0];
         String password = args[1];
 
-        // TODO: pass in the file path through args[2]; replace this
-        Parser parse = new Parser("../../../inputdata/pitt_report_29852.txt", "../../../inputdata/pitt_report_29852.txt");
+        // TODO: pass in the file path through args[2] and args[3]; replace this
+        Parser parse = new Parser("./example_data.txt", "../pitt_input.txt");
         parse.setDatabaseCredentials( userName, password );
 
         parse.startParsing();
@@ -59,13 +59,13 @@ public class Parser {
     }
 
     public void startParsing() {
-//        mDatabaseManager.openConnection();
+        mDatabaseManager.openConnection();
 
         parseFileByLine();
         updateConditionsWithSentenceID();
-//        runSQLQueries();
+        runSQLQueries();
 
-//        mDatabaseManager.closeConnection();
+        mDatabaseManager.closeConnection();
     }
 
     private void updateConditionsWithSentenceID() {
