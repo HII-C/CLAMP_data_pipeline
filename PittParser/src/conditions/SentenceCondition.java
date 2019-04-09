@@ -74,39 +74,39 @@ public class SentenceCondition implements ConditionIntf {
     }
 
     public void updateSentenceText() {
-    	String sentence = "";
-    	try {
-    		FileReader fileReader = new FileReader( mUnparsedFileName );
-    		BufferedReader bufferedReader = new BufferedReader( fileReader );
-    		int count = 0;
-    		int intChar;
-    		
-    		while (count < mIndex1) {
-    			bufferedReader.read();
-    			count++;
-    		}
-    		
-    		while ( (intChar = bufferedReader.read()) != -1 && count < mIndex2) {
-    			char ch = (char) intChar;
-    			if ( ch == '\n' ) {
-    				sentence += " ";
-    			} else {
-    				sentence += ch;
-    			}
-    			count++;
-    		}
-    		
-//    		System.out.println("Sentence: " + sentence);
-    		bufferedReader.close();
-    	}
-    	catch ( Exception e ) {
-    		System.out.println("File read error: " + mUnparsedFileName);
-    	}
-    	
-    	mSentenceText = sentence;
-    	mHasSetSentenceText = true;
-	}
-    
+        String sentence = "";
+        try {
+            FileReader fileReader = new FileReader( mUnparsedFileName );
+            BufferedReader bufferedReader = new BufferedReader( fileReader );
+            int count = 0;
+            int intChar;
+
+            while (count < mIndex1) {
+                bufferedReader.read();
+                count++;
+            }
+
+            while ( (intChar = bufferedReader.read()) != -1 && count < mIndex2) {
+                char ch = (char) intChar;
+                if ( ch == '\n' ) {
+                    sentence += " ";
+                } else {
+                    sentence += ch;
+                }
+                count++;
+            }
+
+    		//System.out.println("Sentence: " + sentence);
+            bufferedReader.close();
+        }
+        catch ( Exception e ) {
+            System.out.println("File read error: " + mUnparsedFileName);
+        }
+
+        mSentenceText = sentence;
+        mHasSetSentenceText = true;
+    }
+
     private void printError(String errorMessage) {
         mParsingErrorOccurred = true;
         System.out.println("RID: " + mRecordId + " - Sentence Condition - " + errorMessage);
@@ -122,6 +122,27 @@ public class SentenceCondition implements ConditionIntf {
             printError( "Requirements not satisfied for SQL query or error occurred");
             return theSQLQueries;
         }
+
+        String sentenceSectionQuery =   "INSERT INTO sentence_section ( section_text ) " +
+                                        "SELECT '" + mSection + "' " +
+                                        "WHERE NOT EXISTS ( SELECT * FROM sentence_section " +
+                                        "WHERE sentence_section.section_text = '" + mSection + "');";
+
+        String sentenceIndexQuery =     "INSERT INTO sentence_index " +
+                                        "( record_id, sentence_id, section_id, c_start, c_end ) " +
+                                        "SELECT " + mRecordId + "," + mSentenceId + ", sentence_section.section_id, " + mIndex1 + "," + mIndex2 + " " +
+                                        "FROM sentence_section " +
+                                        " WHERE sentence_section.section_text= '" + mSection + "';";
+
+        String sentenceTextQuery =      "INSERT INTO sentence_text " +
+                                        "( record_id, sentence_id, section_id, sentence ) " +
+                                        "SELECT " + mRecordId + "," + mSentenceId + ", sentence_section.section_id, '" + mSentenceText + "' " +
+                                        "FROM sentence_section " +
+                                        " WHERE sentence_section.section_text= '" + mSection + "';";
+
+        theSQLQueries.add( sentenceSectionQuery );
+        theSQLQueries.add( sentenceIndexQuery );
+        theSQLQueries.add( sentenceTextQuery );
 
         return theSQLQueries;
     }

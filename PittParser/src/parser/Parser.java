@@ -25,12 +25,12 @@ public class Parser {
 
         System.out.println( "These are the arguments: " + Arrays.toString( args ) );
 
-        String userName = args[0];
-        String password = args[1];
+        //String userName = args[0];
+        //String password = args[1];
 
         // TODO: pass in the file path through args[2] and args[3]; replace this
-        Parser parse = new Parser("./example_data.txt", "../pitt_input.txt");
-        parse.setDatabaseCredentials( userName, password );
+        Parser parse = new Parser("./example_data", "../pitt_input.txt");
+        //parse.setDatabaseCredentials( userName, password );
 
         parse.startParsing();
     }
@@ -59,13 +59,13 @@ public class Parser {
     }
 
     public void startParsing() {
-        mDatabaseManager.openConnection();
+        //mDatabaseManager.openConnection();
 
         parseFileByLine();
         updateConditionsWithSentenceID();
         runSQLQueries();
 
-        mDatabaseManager.closeConnection();
+        //mDatabaseManager.closeConnection();
     }
 
     private void updateConditionsWithSentenceID() {
@@ -80,7 +80,9 @@ public class Parser {
 
             for( String theQuery : theSQLQuery ) {
                 if( theQuery.equals( "" ) ) continue;
-                mDatabaseManager.pushSqlQuery( theQuery );
+                System.out.println( theQuery );
+
+                //mDatabaseManager.pushSqlQuery( theQuery );
             }
         }
     }

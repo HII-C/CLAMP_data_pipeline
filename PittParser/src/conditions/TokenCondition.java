@@ -69,16 +69,19 @@ public class TokenCondition implements ConditionIntf{
             return theQueries;
         }
 
-        theQueries.add( "INSERT INTO pos ( pos_text ) " +
-                        "SELECT " + pos + " " +
-                        "WHERE NOT EXISTS ( SELECT * FROM pos " +
-                                            "WHERE pos.pos_text = " + pos + ")");
+        String thePosQuery =    "INSERT INTO pos ( pos_text ) " +
+                                "SELECT '" + pos + "' " +
+                                "WHERE NOT EXISTS ( SELECT * FROM pos " +
+                                                    "WHERE pos.pos_text = '" + pos + "');";
 
-        theQueries.add( "INSERT INTO token " +
-                        "( record_id, sentence_id, c_start, c_end, pos_id )" +
-                        "VALUES ( " + mRecordId + "," + mSentenceId + "," + mCStart + "," + mCEnd  + ", pos.pos_id" +
-                        "FROM pos " +
-                        "WHERE pos.pos_text = " + pos );
+        String theTokenQuery =  "INSERT INTO token " +
+                                "( record_id, sentence_id, c_start, c_end, pos_id ) " +
+                                "SELECT " + mRecordId + "," + mSentenceId + "," + mCStart + "," + mCEnd  + ", pos.pos_id " +
+                                "FROM pos " +
+                                "WHERE pos.pos_text = '" + pos + ";";
+
+        theQueries.add( thePosQuery );
+        theQueries.add( theTokenQuery );
 
         return theQueries;
     }
