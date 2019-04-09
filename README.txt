@@ -22,12 +22,31 @@ Connect to capstone database:
 USE capstone
 
 Create sentence_text table:
-Create TABLE sentence_text (
+CREATE TABLE sentence_text (
     record_id mediumint UNSIGNED NOT NULL,
     sentence_id smallint UNSIGNED NOT NULL,
-    section tinyint UNSIGNED,E
+    section_id tinyint UNSIGNED,
     sentence text,
+    FOREIGN KEY( section_id ) REFERENCES section ( section_id ),
     PRIMARY KEY( record_id, sentence_id)
+);
+
+Create sentence_index table:
+CREATE table sentence_index (
+    record_id mediumint UNSIGNED NOT NULL,
+    sentence_id smallint UNSIGNED NOT NULL,
+    section_id tinyint UNSIGNED,
+    c_start tinyint UNSIGNED,
+    c_end tinyint UNSIGNED,
+    FOREIGN KEY( section_id ) REFERENCES sentence_section ( section_id ),
+    PRIMARY KEY( record_id, sentence_id )
+);
+
+Create sentence_section table:
+CREATE table sentence_section (
+    section_id tinyint UNSIGNED AUTO_INCREMENT,
+    section_text varchar(30) NOT NULL,
+    PRIMARY KEY( section_id )
 );
 
 Create table pos:
