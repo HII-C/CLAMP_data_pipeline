@@ -135,4 +135,9 @@ public class ConceptCondition implements ConditionIntf{
         mSentenceId = sentenceID;
         mHasSentenceIDSet = true;
     }
+
+	@Override
+	public void updateSentenceText() {
+		// no-op
+	}
 }

@@ -12,6 +12,7 @@ import mysql_interface.DatabaseManagerIntf;
 
 public class Parser {
     public String mFileName;
+    private String mUnparsedFileName;
     public int mSentenceId = 0;
     List<ConditionIntf> mConditions;
 
@@ -28,17 +29,18 @@ public class Parser {
         String password = args[1];
 
         // TODO: pass in the file path through args[2]; replace this
-        Parser parse = new Parser("PittParser\\example_data");
+        Parser parse = new Parser("PittParser\\example_data", "");
         parse.setDatabaseCredentials( userName, password );
 
         parse.startParsing();
     }
 
-    public Parser( String aFileName ) {
+    public Parser( String aFileName, String aUnparsedFileName ) {
         mFileName = aFileName;
         mSentenceManager = new SentenceManager();
         mConditions = new ArrayList<ConditionIntf>();
         mDatabaseManager = DatabaseManager.getInstance();
+        mUnparsedFileName = aUnparsedFileName;
     }
 
     public void setDatabaseCredentials( String aUserName, String aPassword ) {
@@ -117,7 +119,7 @@ public class Parser {
         if( theConditionType.equals("NamedEntity") ) {
             theResCondition = new ConceptCondition(theSplitLine, theRecordId);
         } else if( theConditionType.equals("Sentence") ) {
-            theResCondition = new SentenceCondition(theSplitLine, theRecordId, mSentenceId);
+            theResCondition = new SentenceCondition(theSplitLine, theRecordId, mSentenceId, mUnparsedFileName);
 
             // unique case for sentences; want to use ranges and update other elements with the correct ranges with the manager
             mSentenceId++;

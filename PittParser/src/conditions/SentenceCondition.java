@@ -1,5 +1,8 @@
 package conditions;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 import parser.ParsingUtils;
 import parser.SentenceManager;
 
@@ -11,13 +14,17 @@ public class SentenceCondition implements ConditionIntf {
     String mSection;
     Integer mIndex1;
     Integer mIndex2;
+    String mSentenceText;
+    String mUnparsedFileName;
 
     boolean mParsingErrorOccurred;
+    boolean mHasSetSentenceText;
 
     // Methods
 
-    public SentenceCondition( String[] aParts, int aRecordId, int aSentenceId ) {
+    public SentenceCondition( String[] aParts, int aRecordId, int aSentenceId, String aUnparsedFileName ) {
         parseParts( aParts, aRecordId, aSentenceId );
+        mUnparsedFileName = aUnparsedFileName;
     }
 
     public int[] getSentenceRange() {
@@ -28,7 +35,7 @@ public class SentenceCondition implements ConditionIntf {
         int[] res = {mIndex1, mIndex2};
         return res;
     }
-
+    
     private void parseParts( String[] aParts, int aRecordId, int aSentenceId ) {
         if( !aParts[0].equals("Sentence") ) {
             printError( "Type is incorrect: " + aParts[0]);
@@ -59,6 +66,8 @@ public class SentenceCondition implements ConditionIntf {
 
         mIndex1 = lIndex;
         mIndex2 = rIndex;
+        
+        
     }
 
     private void printError(String errorMessage) {
@@ -81,4 +90,33 @@ public class SentenceCondition implements ConditionIntf {
     public void updateSentenceID( SentenceManager aSentenceManager ) {
         // no-op
     }
+
+	@Override
+	public void updateSentenceText() {
+    	String sentence = "";
+    	try {
+    		FileReader fileReader = new FileReader( mUnparsedFileName );
+    		BufferedReader bufferedReader = new BufferedReader( fileReader );
+    		int count = mIndex1;
+    		int intChar;
+    		
+    		while ( (intChar = bufferedReader.read()) != -1 && count < mIndex2) {
+    			char ch = (char) intChar;
+    			if ( ch == '\n' ) {
+    				sentence += " ";
+    			} else {
+    				sentence += ch;
+    			}
+    			count++;
+    		}
+    		
+    		bufferedReader.close();
+    	}
+    	catch ( Exception e ) {
+    		System.out.println("File read error: " + mUnparsedFileName);
+    	}
+    	
+    	mSentenceText = sentence;
+    	mHasSetSentenceText = true;
+	}
 }

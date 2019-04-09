@@ -111,4 +111,9 @@ public class RelationCondition implements ConditionIntf {
 
         mHasSentenceIDSet = true;
     }
+
+	@Override
+	public void updateSentenceText() {
+		// no-op
+	}
 }

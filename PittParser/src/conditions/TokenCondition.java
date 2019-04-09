@@ -77,4 +77,9 @@ public class TokenCondition implements ConditionIntf{
         mSentenceId = sentenceID;
         mHasSentenceIdSet = true;
     }
+
+	@Override
+	public void updateSentenceText() {
+		// no-op
+	}
 }
