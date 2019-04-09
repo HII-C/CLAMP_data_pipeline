@@ -70,9 +70,38 @@ public class SentenceCondition implements ConditionIntf {
         mIndex1 = lIndex;
         mIndex2 = rIndex;
         
-        
+        updateSentenceText();
     }
 
+    public void updateSentenceText() {
+    	String sentence = "";
+    	try {
+    		FileReader fileReader = new FileReader( mUnparsedFileName );
+    		BufferedReader bufferedReader = new BufferedReader( fileReader );
+    		int count = mIndex1;
+    		int intChar;
+    		
+    		while ( (intChar = bufferedReader.read()) != -1 && count < mIndex2) {
+    			char ch = (char) intChar;
+    			if ( ch == '\n' ) {
+    				sentence += " ";
+    			} else {
+    				sentence += ch;
+    			}
+    			count++;
+    		}
+    		
+    		System.out.println(sentence);
+    		bufferedReader.close();
+    	}
+    	catch ( Exception e ) {
+    		System.out.println("File read error: " + mUnparsedFileName);
+    	}
+    	
+    	mSentenceText = sentence;
+    	mHasSetSentenceText = true;
+	}
+    
     private void printError(String errorMessage) {
         mParsingErrorOccurred = true;
         System.out.println("RID: " + mRecordId + " - Sentence Condition - " + errorMessage);
@@ -96,33 +125,4 @@ public class SentenceCondition implements ConditionIntf {
     public void updateSentenceID( SentenceManager aSentenceManager ) {
         // no-op
     }
-
-	@Override
-	public void updateSentenceText() {
-    	String sentence = "";
-    	try {
-    		FileReader fileReader = new FileReader( mUnparsedFileName );
-    		BufferedReader bufferedReader = new BufferedReader( fileReader );
-    		int count = mIndex1;
-    		int intChar;
-    		
-    		while ( (intChar = bufferedReader.read()) != -1 && count < mIndex2) {
-    			char ch = (char) intChar;
-    			if ( ch == '\n' ) {
-    				sentence += " ";
-    			} else {
-    				sentence += ch;
-    			}
-    			count++;
-    		}
-    		
-    		bufferedReader.close();
-    	}
-    	catch ( Exception e ) {
-    		System.out.println("File read error: " + mUnparsedFileName);
-    	}
-    	
-    	mSentenceText = sentence;
-    	mHasSetSentenceText = true;
-	}
 }
