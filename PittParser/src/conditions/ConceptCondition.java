@@ -15,8 +15,8 @@ public class ConceptCondition implements ConditionIntf{
     int mIndex1;
     int mIndex2;
     String mText;
-    int mType;
-    int mAssertion;
+    String mSemantic;
+    String mAssertion;
 
     boolean mParsingErrorOccurred;
     boolean mHasSentenceIDSet;
@@ -54,14 +54,15 @@ public class ConceptCondition implements ConditionIntf{
             printError( "Assertion parsing error: " + aParts[4] );
             return;
         }
-        mapAssertionToAssertionNumber( theAssertionString );
+        mAssertion = theAssertionString;
 
         String theSemanticString = ParsingUtils.splitRight( aParts[3], "semantic=");
         if( theSemanticString.equals("") ){
             printError( "Semantic parsing error: " + aParts[3] );
             return;
         }
-        mapSemanticToTypeNumber( theSemanticString );
+
+        mSemantic = theSemanticString;
 
         Integer theIndex1 = ParsingUtils.parseInt( aParts[1] );
         Integer theIndex2 = ParsingUtils.parseInt( aParts[2] );
@@ -85,32 +86,6 @@ public class ConceptCondition implements ConditionIntf{
         // success!
     }
 
-    private void mapSemanticToTypeNumber(String aSemantic) {
-        if( aSemantic.equals("problem") ) {
-            mType = 1;
-        } else if( aSemantic.equals("test") ) {
-            mType = 2;
-        } else if( aSemantic.equals("treatment") ) {
-            mType = 3;
-        } else {
-            mType = -1;
-            printError("Semantic mapping invalid: " + aSemantic);
-        }
-    }
-
-    private void mapAssertionToAssertionNumber(String aAssertion) {
-        if( aAssertion.equals("absent") ){
-            mAssertion = 1;
-        } else if( aAssertion.equals("hypothetical") ){
-            mAssertion = 2;
-        } else if( aAssertion.equals("present") ){
-            mAssertion = 3;
-        } else {
-            mAssertion = -1;
-            printError("Assertion mapping invalid: " + aAssertion);
-        }
-    }
-
     private void printError(String errorMessage) {
         mParsingErrorOccurred = true;
         System.out.println("RID: " + mRecordId + " - Concepts Condition - " + errorMessage);
@@ -126,6 +101,26 @@ public class ConceptCondition implements ConditionIntf{
             printError( "Requirements not satisfied for SQL query or error occurred");
             return theSQLQueries;
         }
+
+        String conceptSemanticQuery =   "INSERT INTO concept_semantic ( semantic_text ) " +
+                                        "SELECT '" + mSemantic + "' " +
+                                        "WHERE NOT EXISTS ( SELECT * FROM concept_semantic " +
+                                        "WHERE concept_semantic.semantic_text = '" + mSemantic + "');";
+
+        String conceptAssertionQuery =  "INSERT INTO concept_assertion ( assertion_text ) " +
+                                        "SELECT '" + mAssertion + "' " +
+                                        "WHERE NOT EXISTS ( SELECT * FROM concept_assertion " +
+                                        "WHERE concept_assertion.assertion_text = '" + mAssertion + "');";
+
+        String conceptQuery =           "INSERT INTO concepts ( record_id, sentence_id, cui, c_start, c_end, text, semantic, assertion ) " +
+                                        "SELECT " + mRecordId + "," + mSentenceId + ",'" + mConceptUID + "'," + mIndex1 + "," + mIndex2 + ",'" + mText + "', concept_semantic.semantic_id, concept_assertion.assertion_id " +
+                                        "FROM concept_semantic, concept_assertion " +
+                                        " WHERE concept_semantic.semantic_id= '" + mSemantic + "' " +
+                                        "AND concept_assertion.assertion_id = '" + mAssertion + "';";
+
+        theSQLQueries.add( conceptSemanticQuery );
+        theSQLQueries.add( conceptAssertionQuery );
+        theSQLQueries.add( conceptQuery );
 
         return theSQLQueries;
     }

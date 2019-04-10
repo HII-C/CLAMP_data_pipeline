@@ -29,7 +29,10 @@ public class Parser {
         //String password = args[1];
 
         // TODO: pass in the file path through args[2] and args[3]; replace this
-        Parser parse = new Parser("./example_data", "../pitt_input.txt");
+        String windows = "PittParser\\example_data";
+        String linuxShit = "./example_data";
+
+        Parser parse = new Parser(windows, "../pitt_input.txt");
         //parse.setDatabaseCredentials( userName, password );
 
         parse.startParsing();
