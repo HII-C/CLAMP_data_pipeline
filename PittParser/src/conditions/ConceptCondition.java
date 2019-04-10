@@ -36,33 +36,15 @@ public class ConceptCondition implements ConditionIntf{
             return;
         }
 
-        if( aParts.length != 7 ) {
+        if( aParts.length != 7 && aParts.length != 6 ) {
             printError("Unexpected parts size: " + aParts.length);
             return;
         }
 
+        // Some records have assertion, and some don't~???
+        boolean hasAssertion = aParts.length == 7;
+
         mRecordId = aRecordId;
-
-        mConceptUID = ParsingUtils.splitRight( aParts[5], "cui=" );
-        if( mConceptUID.equals("") ){
-            printError( "Concept UID parsing error: " + aParts[5] );
-            return;
-        }
-
-        String theAssertionString = ParsingUtils.splitRight( aParts[4], "assertion=");
-        if( theAssertionString.equals("") ){
-            printError( "Assertion parsing error: " + aParts[4] );
-            return;
-        }
-        mAssertion = theAssertionString;
-
-        String theSemanticString = ParsingUtils.splitRight( aParts[3], "semantic=");
-        if( theSemanticString.equals("") ){
-            printError( "Semantic parsing error: " + aParts[3] );
-            return;
-        }
-
-        mSemantic = theSemanticString;
 
         Integer theIndex1 = ParsingUtils.parseInt( aParts[1] );
         Integer theIndex2 = ParsingUtils.parseInt( aParts[2] );
@@ -75,13 +57,47 @@ public class ConceptCondition implements ConditionIntf{
         mIndex1 = theIndex1;
         mIndex2 = theIndex2;
 
-        String theTextString = ParsingUtils.splitRight( aParts[6], "ne=" );
+        String theSemanticString = ParsingUtils.splitRight( aParts[3], "semantic=");
+        if( theSemanticString.equals("") ){
+            printError( "Semantic parsing error: " + aParts[3] );
+            return;
+        }
+
+        if( theSemanticString.equals("temporal")) {
+            printError( "Ignoring temporal Concepts! " );
+            return;
+        }
+
+        mSemantic = theSemanticString;
+
+        int theIndex = 4;
+
+        if( hasAssertion ) {
+            String theAssertionString = ParsingUtils.splitRight( aParts[theIndex], "assertion=");
+            if( theAssertionString.equals("") ){
+                printError( "Assertion parsing error: " + aParts[theIndex] );
+                return;
+            }
+            mAssertion = theAssertionString;
+            theIndex++;
+        }
+
+        mConceptUID = ParsingUtils.splitRight( aParts[theIndex], "cui=" );
+        if( mConceptUID.equals("") ){
+            printError( "Concept UID parsing error: " + aParts[theIndex] );
+            return;
+        }
+        theIndex++;
+
+
+        String theTextString = ParsingUtils.splitRight( aParts[theIndex], "ne=" );
         if( theTextString.equals("") ) {
-            printError( "NE parsing error: " + aParts[6] );
+            printError( "NE parsing error: " + aParts[theIndex] );
             return;
         }
 
         mText = theTextString;
+        theIndex++;
 
         // success!
     }
@@ -112,11 +128,20 @@ public class ConceptCondition implements ConditionIntf{
                                         "WHERE NOT EXISTS ( SELECT * FROM concept_assertion " +
                                         "WHERE concept_assertion.assertion_text = '" + mAssertion + "');";
 
-        String conceptQuery =           "INSERT INTO concepts ( record_id, sentence_id, cui, c_start, c_end, text, semantic, assertion ) " +
+        String conceptQuery;
+        if( mAssertion == null ) {
+            conceptQuery =              "INSERT INTO concepts ( record_id, sentence_id, cui, c_start, c_end, text, semantic, assertion ) " +
                                         "SELECT " + mRecordId + "," + mSentenceId + ",'" + mConceptUID + "'," + mIndex1 + "," + mIndex2 + ",'" + mText + "', concept_semantic.semantic_id, concept_assertion.assertion_id " +
                                         "FROM concept_semantic, concept_assertion " +
                                         " WHERE concept_semantic.semantic_id= '" + mSemantic + "' " +
                                         "AND concept_assertion.assertion_id = '" + mAssertion + "';";
+        }
+        else {
+            conceptQuery =              "INSERT INTO concepts ( record_id, sentence_id, cui, c_start, c_end, text, semantic ) " +
+                                        "SELECT " + mRecordId + "," + mSentenceId + ",'" + mConceptUID + "'," + mIndex1 + "," + mIndex2 + ",'" + mText + "', concept_semantic.semantic_id " +
+                                        "FROM concept_semantic " +
+                                        " WHERE concept_semantic.semantic_id= '" + mSemantic + "';";
+        }
 
         theSQLQueries.add( conceptSemanticQuery );
         theSQLQueries.add( conceptAssertionQuery );

@@ -52,7 +52,7 @@ public class RelationCondition implements ConditionIntf {
             return;
         }
 
-        if( aParts.length != 7 ) {
+        if( aParts.length != 8 ) {
             printError( "Unexpected parts size: " + aParts.length );
             return;
         }
@@ -70,28 +70,21 @@ public class RelationCondition implements ConditionIntf {
         mTargetIndex1 = theIndex1;
         mTargetIndex2 = theIndex2;
 
-        // handle the "problem 172" grouped case here:
-        String[] problemSplit = aParts[3].split(" ");
-        if( problemSplit.length != 2 ) {
-            printError( "Problem parsing problem split: " + aParts[3]);
-            return;
-        }
+        mTargetType = aParts[3];
 
-        mRelationType = problemSplit[0];
-
-        theIndex1 = ParsingUtils.parseInt( problemSplit[1] );
-        theIndex2 = ParsingUtils.parseInt( aParts[4] );
+        theIndex1 = ParsingUtils.parseInt( aParts[4] );
+        theIndex2 = ParsingUtils.parseInt( aParts[5] );
 
         if( theIndex1 == null || theIndex2 == null ) {
-            printError( "Index parsing error: " + problemSplit[1] + " - " + aParts[4] );
+            printError( "Index parsing error: " + aParts[4] + " - " + aParts[5] );
             return;
         }
 
         mRelationIndex1 = theIndex1;
         mRelationIndex2 = theIndex2;
 
-        mRelationSemanticType = aParts[5];
-        mRelationType = ParsingUtils.splitRight(aParts[6], "semantic=");
+        mRelationSemanticType = aParts[6];
+        mRelationType = ParsingUtils.splitRight(aParts[7], "semantic=");
         if( mRelationType.equals("")) {
             printError("Semantic Type 2 parsing error: " + aParts[6]);
             return;
