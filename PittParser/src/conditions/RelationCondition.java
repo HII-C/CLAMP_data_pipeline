@@ -3,6 +3,8 @@ package conditions;
 import parser.ParsingUtils;
 import parser.SentenceManager;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,13 @@ public class RelationCondition implements ConditionIntf {
     String mRelationType;
     String mSemanticType1;
     String mSemanticType2;
+    String mUnparsedFileName;
+    
+    // mRelationText is derived from the text between mLeftIndex1 and mLeftIndex2
+    // mRelationStatement is derived from the text between mRightIndex1 and mRightIndex2
+    String mRelationText;
+    String mRelationStatement;
+    boolean mHasUpdatedRelationText = false;
 
     int mSentenceID1;
     int mSentenceID2;
@@ -24,8 +33,9 @@ public class RelationCondition implements ConditionIntf {
     boolean mParsingErrorOccurred;
     boolean mHasSentenceIDSet;
 
-    public RelationCondition( String[] aParts, int aRecordId ) {
-        parseParts(aParts,aRecordId);
+    public RelationCondition( String[] aParts, int aRecordId, String aUnparsedFileName ) {
+        mUnparsedFileName = aUnparsedFileName;
+    	parseParts(aParts,aRecordId);
     }
 
     // Expected input
@@ -81,8 +91,45 @@ public class RelationCondition implements ConditionIntf {
             printError("Semantic Type 2 parsing error: " + aParts[6]);
             return;
         }
+        
+        mRelationText = updateText(mLeftIndex1, mLeftIndex2);
+        mRelationStatement = updateText(mRightIndex1, mRightIndex2);
+        mHasUpdatedRelationText = true;
     }
 
+    private String updateText(int mIndex1, int mIndex2) {
+        String sentence = "";
+        try {
+            FileReader fileReader = new FileReader( mUnparsedFileName );
+            BufferedReader bufferedReader = new BufferedReader( fileReader );
+            int count = 0;
+            int intChar;
+
+            while (count < mIndex1) {
+                bufferedReader.read();
+                count++;
+            }
+
+            while ( (intChar = bufferedReader.read()) != -1 && count < mIndex2) {
+                char ch = (char) intChar;
+                if ( ch == '\n' ) {
+                    sentence += " ";
+                } else {
+                    sentence += ch;
+                }
+                count++;
+            }
+
+//    		System.out.println("Sentence: " + sentence);
+            bufferedReader.close();
+        }
+        catch ( Exception e ) {
+            System.out.println("File read error: " + mUnparsedFileName);
+        }
+        
+        return sentence;
+    }
+    
     private void printError(String errorMessage) {
         mParsingErrorOccurred = true;
         System.out.println("RID: " + mRecordId + " - Relation Condition - " + errorMessage);

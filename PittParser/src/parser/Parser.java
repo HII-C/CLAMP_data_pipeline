@@ -132,7 +132,7 @@ public class Parser {
         } else if( theConditionType.equals("Token") ) {
             theResCondition = new TokenCondition(theSplitLine, theRecordId);
         } else if( theConditionType.equals("Relation") ) {
-            theResCondition = new RelationCondition(theSplitLine, theRecordId);
+            theResCondition = new RelationCondition(theSplitLine, theRecordId, mUnparsedFileName);
         } else {
             System.out.println( "Unknown condition type: " + theSplitLine[0] );
         }
