@@ -99,3 +99,27 @@ CREATE table concepts (
     FOREIGN KEY ( assertion ) REFERENCES concept_assertion( assertion_id ),
     PRIMARY KEY ( concept_id )
 );
+
+Create relation_type table:
+CREATE table relation_type (
+    relation_type_id tinyint UNSIGNED AUTO_INCREMENT,
+    relation_semantic_type varchar(15),
+    relation_type varchar(15),
+    PRIMARY KEY ( relation_type_id )
+);
+
+Create relations table:
+CREATE table relations (
+    relation_id mediumint UNSIGNED AUTO_INCREMENT,
+    record_id mediumint UNSIGNED,
+    sentence_id smallint UNSIGNED,
+    concept_id mediumint UNSIGNED,
+    relation_type_id tinyint UNSIGNED,
+    c_start smallint UNSIGNED,
+    c_end smallint UNSIGNED,
+    relation_text text,
+    FOREIGN KEY ( record_id, sentence_id ) REFERENCES sentence_text( record_id, sentence_id ),
+    FOREIGN KEY ( concept_id ) REFERENCES concepts( concept_id ),
+    FOREIGN KEY ( relation_type_id ) REFERENCES relation_type( relation_type_id ),
+    PRIMARY KEY ( relation_id )
+);

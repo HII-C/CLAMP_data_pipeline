@@ -149,6 +149,20 @@ public class RelationCondition implements ConditionIntf {
             return theSQLQueries;
         }
 
+        String relationTypeQuery =  "INSERT INTO relation_type ( relation_semantic_type, relation_type ) " +
+                					"SELECT '" + mRelationSemanticType + "," + mRelationType + "' " +
+                					"WHERE NOT EXISTS ( SELECT * FROM relation_type " +
+                					"WHERE relation_type.relation_semantic_type = '" + mRelationSemanticType + "' " +
+                					"AND relation_type.relation_type = '" + mRelationType + "');";
+        
+        String relationsQuery = 	"INSERT INTO relations ( record_id, sentence_id, concept_id, relation_type_id, c_start, c_end, relation_text ) " +
+                					"SELECT " + mRecordId + ", " + mSentenceID2 + " , concepts.concept_id, relation_type.relation_type_id, " + mRelationIndex1 + "," + mRelationIndex2 + ", '" + mRelationText + "' " +
+                					"FROM relation_type, concepts " +
+                					"WHERE concepts.c_start= " + mTargetIndex1 + " " +
+                					"AND concepts.c_end = " + mTargetIndex2 + " " +
+                					"AND relation_type.relation_type = '" + "' mRelationType" + " " +
+                					"AND relation_type.relation_semantic_type = '" + mRelationSemanticType + "';";
+        
         return theSQLQueries;
     }
 
