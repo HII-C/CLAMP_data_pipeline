@@ -101,7 +101,7 @@ public class Parser {
 
             for( String theQuery : theSQLQuery ) {
                 if( theQuery.equals( "" ) ) continue;
-                System.out.println( theQuery );
+                // System.out.println( theQuery );
 
                 mDatabaseManager.pushSqlQuery( theQuery );
             }
