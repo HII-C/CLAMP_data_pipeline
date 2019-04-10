@@ -150,7 +150,7 @@ public class RelationCondition implements ConditionIntf {
         }
 
         String relationTypeQuery =  "INSERT INTO relation_type ( relation_semantic_type, relation_type ) " +
-                					"SELECT '" + mRelationSemanticType + ",'" + mRelationType + "' " +
+                					"SELECT '" + mRelationSemanticType + "','" + mRelationType + "' " +
                 					"WHERE NOT EXISTS ( SELECT * FROM relation_type " +
                 					"WHERE relation_type.relation_semantic_type = '" + mRelationSemanticType + "' " +
                 					"AND relation_type.relation_type = '" + mRelationType + "');";
