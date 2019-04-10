@@ -138,7 +138,7 @@ public class SentenceCondition implements ConditionIntf {
                                         " WHERE sentence_section.section_text= '" + mSection + "';";
 
         String sentenceTextQuery =      "INSERT INTO sentence_text " +
-                                        "( record_id, sentence_id, section_id, sentence ) " +
+                                        "( record_id, sentence_id, section, sentence ) " +
                                         "SELECT " + mRecordId + "," + mSentenceId + ", sentence_section.section_id, '" + mSentenceText + "' " +
                                         "FROM sentence_section " +
                                         " WHERE sentence_section.section_text= '" + mSection + "';";
