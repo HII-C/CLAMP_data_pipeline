@@ -103,7 +103,7 @@ public class RelationCondition implements ConditionIntf {
     }
 
     private String updateText(int mIndex1, int mIndex2) {
-        String sentence = "";
+        String text = "";
         try {
             FileReader fileReader = new FileReader( mUnparsedFileName );
             BufferedReader bufferedReader = new BufferedReader( fileReader );
@@ -118,9 +118,9 @@ public class RelationCondition implements ConditionIntf {
             while ( (intChar = bufferedReader.read()) != -1 && count < mIndex2) {
                 char ch = (char) intChar;
                 if ( ch == '\n' ) {
-                    sentence += " ";
+                    text += " ";
                 } else {
-                    sentence += ch;
+                    text += ch;
                 }
                 count++;
             }
@@ -132,7 +132,10 @@ public class RelationCondition implements ConditionIntf {
             System.out.println("File read error: " + mUnparsedFileName);
         }
         
-        return sentence;
+        if (text == "") {
+        	System.out.println("Error in extracting text; returned empty string");
+        }
+        return text;
     }
     
     private void printError(String errorMessage) {
