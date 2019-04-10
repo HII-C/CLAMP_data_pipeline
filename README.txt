@@ -68,3 +68,34 @@ CREATE table token (
     FOREIGN KEY ( pos_id ) REFERENCES pos ( pos_id ),
     PRIMARY KEY ( token_id )
 );
+
+Create concept_semantic table:
+CREATE table concept_semantic (
+    semantic_id tinyint UNSIGNED AUTO_INCREMENT,
+    semantic_text varchar(15),
+    PRIMARY KEY ( semantic_id )
+);
+
+Create concept_assertion table:
+CREATE table concept_assertion (
+    assertion_id tinyint UNSIGNED AUTO_INCREMENT,
+    assertion_text varchar(15),
+    PRIMARY KEY ( assertion_id )
+);
+
+Create concepts table:
+CREATE table concepts (
+    concept_id mediumint UNSIGNED AUTO_INCREMENT,
+    record_id mediumint UNSIGNED,
+    sentence_id smallint UNSIGNED,
+    cui char(8),
+    c_start smallint UNSIGNED,
+    c_end smallint UNSIGNED,
+    text varchar(200),
+    semantic tinyint UNSIGNED,
+    assertion tinyint UNSIGNED,
+    FOREIGN KEY ( record_id, sentence_id ) REFERENCES sentence_text( record_id, sentence_id),
+    FOREIGN KEY ( semantic ) REFERENCES concept_semantic( semantic_id ),
+    FOREIGN KEY ( assertion ) REFERENCES concept_assertion( assertion_id ),
+    PRIMARY KEY ( concept_id )
+);
