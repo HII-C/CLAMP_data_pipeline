@@ -20,6 +20,7 @@ public class ConceptCondition implements ConditionIntf{
 
     boolean mParsingErrorOccurred;
     boolean mHasSentenceIDSet;
+    boolean mHasFailedFromTemporal;
 
     // Methods
 
@@ -64,6 +65,7 @@ public class ConceptCondition implements ConditionIntf{
         }
 
         if( theSemanticString.equals("temporal")) {
+            mHasFailedFromTemporal = true;
             printError( "Ignoring temporal Concepts! " );
             return;
         }
@@ -104,7 +106,11 @@ public class ConceptCondition implements ConditionIntf{
 
     private void printError(String errorMessage) {
         mParsingErrorOccurred = true;
-        System.out.println("RID: " + mRecordId + " - Concepts Condition - " + errorMessage);
+
+        // suppress output if a result of temporal concept
+        if( !mHasFailedFromTemporal ) {
+            System.out.println("RID: " + mRecordId + " - Concepts Condition - " + errorMessage);
+        }
     }
 
     // ConditionIntf OVERRIDES
@@ -160,5 +166,10 @@ public class ConceptCondition implements ConditionIntf{
 
         mSentenceId = sentenceID;
         mHasSentenceIDSet = true;
+    }
+
+    @Override
+    public boolean hasSQLGenerationCompletedSuccessfully(){
+        return mHasFailedFromTemporal || ( !mParsingErrorOccurred && mHasSentenceIDSet );
     }
 }

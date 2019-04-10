@@ -154,4 +154,9 @@ public class SentenceCondition implements ConditionIntf {
     public void updateSentenceID( SentenceManager aSentenceManager ) {
         // no-op
     }
+
+    @Override
+    public boolean hasSQLGenerationCompletedSuccessfully(){
+        return (!mParsingErrorOccurred);
+    }
 }

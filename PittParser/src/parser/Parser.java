@@ -83,6 +83,12 @@ public class Parser {
 
     private void runSQLQueries() {
         for( ConditionIntf currCondition : mConditions ) {
+            // If there is an error with the condition, we throw and let the user handle the error!
+            if( !currCondition.hasSQLGenerationCompletedSuccessfully() ) {
+                System.out.println("Terminating on sample: " + mRecordId);
+                System.exit(0);
+            }
+
             List<String> theSQLQuery = currCondition.getSQLAddQuery();
 
             for( String theQuery : theSQLQuery ) {
@@ -128,7 +134,7 @@ public class Parser {
     private ConditionIntf getConditionFromLine( String line ) {
         String[] theSplitLine =  line.split("\t");
 
-        System.out.println(" The parse line is: " + Arrays.toString( theSplitLine ));
+        //System.out.println(" The parse line is: " + Arrays.toString( theSplitLine ));
 
         String theConditionType = theSplitLine[0];
         ConditionIntf theResCondition = null;

@@ -167,4 +167,9 @@ public class RelationCondition implements ConditionIntf {
 
         mHasSentenceIDSet = true;
     }
+
+    @Override
+    public boolean hasSQLGenerationCompletedSuccessfully(){
+        return (!mParsingErrorOccurred && mHasSentenceIDSet);
+    }
 }

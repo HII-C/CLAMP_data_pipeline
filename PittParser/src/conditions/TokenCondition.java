@@ -97,4 +97,9 @@ public class TokenCondition implements ConditionIntf{
         mSentenceId = sentenceID;
         mHasSentenceIdSet = true;
     }
+
+    @Override
+    public boolean hasSQLGenerationCompletedSuccessfully(){
+        return (!mParsingErrorOccurred && mHasSentenceIdSet);
+    }
 }
