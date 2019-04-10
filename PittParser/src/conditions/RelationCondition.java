@@ -163,6 +163,9 @@ public class RelationCondition implements ConditionIntf {
                 					"AND relation_type.relation_type = '" + "' mRelationType" + " " +
                 					"AND relation_type.relation_semantic_type = '" + mRelationSemanticType + "';";
         
+        theSQLQueries.add(relationTypeQuery);
+        theSQLQueries.add(relationsQuery);
+        
         return theSQLQueries;
     }
 
