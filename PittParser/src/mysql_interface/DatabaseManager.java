@@ -59,7 +59,7 @@ public class DatabaseManager implements DatabaseManagerIntf{
 	public void pushSqlQuery( String aQuery ) {
 		try {
 			Statement statement = mConnection.createStatement();
-			//statement.executeQuery( aQuery );
+			statement.executeQuery( aQuery );
 			statement.close();
 		} catch (Exception e) {
 			e.printStackTrace();

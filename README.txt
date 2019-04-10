@@ -9,7 +9,7 @@ Parsable line types:
 The executable jar for this application is located in PittParser/out/artifacts/~.jar
 This jar can be run with:
 1. cd to the above directory
-2. java -jar name_of_jar.jar < database UID > < database password >
+2. java -jar name_of_jar.jar < database UID > < database password > <path_to_output_file> <path_to_input_file>
 
 To configure build on IDE:
 1. Add the .jar files in PittParser/external_dependencies to the build path

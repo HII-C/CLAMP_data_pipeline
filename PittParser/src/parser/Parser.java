@@ -26,18 +26,21 @@ public class Parser {
 
         System.out.println( "These are the arguments: " + Arrays.toString( args ) );
 
-        //String userName = args[0];
-        //String password = args[1];
+        String userName = args[0];
+        String password = args[1];
 
-        // TODO: pass in the file path through args[2] and args[3]; replace this
-        String windows = "PittParser\\pitt_report_67016.txt";
-        String linuxShit = "../pitt_report_67016.txt";
+        String theOutputFile = args[2];
+        String theInputFile = args[3];
 
-        String rawFile = "PittParser\\raw.txt";
-        String linuxRaw = "../raw.txt";
+        // FOR TESTING LOCALLY
+        //String windows = "PittParser\\pitt_report_67016.txt";
+        //String linuxShit = "../pitt_report_67016.txt";
 
-        Parser parse = new Parser(windows, rawFile);
-        //parse.setDatabaseCredentials( userName, password );
+        //String rawFile = "PittParser\\raw.txt";
+        //String linuxRaw = "../raw.txt";
+
+        Parser parse = new Parser(theOutputFile, theInputFile);
+        parse.setDatabaseCredentials( userName, password );
 
         parse.startParsing();
     }
@@ -66,13 +69,13 @@ public class Parser {
     }
 
     public void startParsing() {
-        //mDatabaseManager.openConnection();
+        mDatabaseManager.openConnection();
 
         parseFileByLine();
         updateConditionsWithSentenceID();
         runSQLQueries();
 
-        //mDatabaseManager.closeConnection();
+        mDatabaseManager.closeConnection();
     }
 
     private void updateConditionsWithSentenceID() {
@@ -95,7 +98,7 @@ public class Parser {
                 if( theQuery.equals( "" ) ) continue;
                 System.out.println( theQuery );
 
-                //mDatabaseManager.pushSqlQuery( theQuery );
+                mDatabaseManager.pushSqlQuery( theQuery );
             }
         }
     }
