@@ -32,6 +32,8 @@ public class Parser {
         String windows = "PittParser\\example_data";
         String linuxShit = "./example_data";
 
+        String rawFile = "PittParser\\raw_data";
+
         Parser parse = new Parser(windows, "../pitt_input.txt");
         //parse.setDatabaseCredentials( userName, password );
 
