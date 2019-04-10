@@ -15,6 +15,7 @@ public class Parser {
     private String mUnparsedFileName;
     public int mSentenceId = 0;
     List<ConditionIntf> mConditions;
+    private int mRecordId;
 
     private SentenceManager mSentenceManager;
     private DatabaseManagerIntf mDatabaseManager;
@@ -29,12 +30,13 @@ public class Parser {
         //String password = args[1];
 
         // TODO: pass in the file path through args[2] and args[3]; replace this
-        String windows = "PittParser\\example_data";
-        String linuxShit = "./example_data";
+        String windows = "PittParser\\pitt_report_67016.txt";
+        String linuxShit = "../pitt_report_67016.txt";
 
-        String rawFile = "PittParser\\raw_data";
+        String rawFile = "PittParser\\raw.txt";
+        String linuxRaw = "../raw.txt";
 
-        Parser parse = new Parser(windows, "../pitt_input.txt");
+        Parser parse = new Parser(windows, rawFile);
         //parse.setDatabaseCredentials( userName, password );
 
         parse.startParsing();
@@ -95,6 +97,14 @@ public class Parser {
     private void parseFileByLine( ) {
         String theLine = null;
 
+        Integer theRecord = ParsingUtils.extractRecordFromFileName( mFileName );
+        if( theRecord == null ) {
+            System.out.println( "Error with the record name parsing!");
+            return;
+        }
+
+        mRecordId = theRecord;
+
         try {
             FileReader fileReader = new FileReader( mFileName );
             BufferedReader bufferedReader = new BufferedReader( fileReader );
@@ -116,28 +126,25 @@ public class Parser {
     }
 
     private ConditionIntf getConditionFromLine( String line ) {
-        String[] theSplitLine = ParsingUtils.splitByMinSpace( line, 3 );
-
-        // TODO: extract the record ID from the filename
-        int theRecordId = 1;
+        String[] theSplitLine =  line.split("\t");
 
         System.out.println(" The parse line is: " + Arrays.toString( theSplitLine ));
 
         String theConditionType = theSplitLine[0];
         ConditionIntf theResCondition = null;
         if( theConditionType.equals("NamedEntity") ) {
-            theResCondition = new ConceptCondition(theSplitLine, theRecordId);
+            theResCondition = new ConceptCondition(theSplitLine, mRecordId);
         } else if( theConditionType.equals("Sentence") ) {
-            theResCondition = new SentenceCondition(theSplitLine, theRecordId, mSentenceId, mUnparsedFileName);
+            theResCondition = new SentenceCondition(theSplitLine, mRecordId, mSentenceId, mUnparsedFileName);
 
             // unique case for sentences; want to use ranges and update other elements with the correct ranges with the manager
             mSentenceId++;
             SentenceCondition castedSentenceCondition = (SentenceCondition) theResCondition;
             mSentenceManager.addSentenceRange( ((SentenceCondition) theResCondition).getSentenceRange() );
         } else if( theConditionType.equals("Token") ) {
-            theResCondition = new TokenCondition(theSplitLine, theRecordId);
+            theResCondition = new TokenCondition(theSplitLine, mRecordId);
         } else if( theConditionType.equals("Relation") ) {
-            theResCondition = new RelationCondition(theSplitLine, theRecordId, mUnparsedFileName);
+            theResCondition = new RelationCondition(theSplitLine, mRecordId, mUnparsedFileName);
         } else {
             System.out.println( "Unknown condition type: " + theSplitLine[0] );
         }

@@ -1,6 +1,7 @@
 package parser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ParsingUtils{
@@ -15,6 +16,21 @@ public class ParsingUtils{
         }
 
         return "";
+    }
+
+    public static Integer extractRecordFromFileName( String fileName ) {
+        String[] firstSplit = fileName.split("_");
+
+        if( firstSplit.length != 3 ) {
+            return null;
+        }
+
+        String[] secondSplit = firstSplit[2].split("\\.");
+        if( secondSplit.length != 2) {
+            return null;
+        }
+
+        return Integer.parseInt( secondSplit[0] );
     }
 
     // Parses int if successful; null Integer if not
