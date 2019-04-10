@@ -55,19 +55,11 @@ public class Parser {
 
     public void setDatabaseCredentials( String aUserName, String aPassword ) {
         ((DatabaseManager) mDatabaseManager ).setCredentials( aUserName, aPassword );
-
-        // Connection test
-        try {
-            mDatabaseManager.openConnection();
-            mDatabaseManager.pushSqlQuery("USE capstone;");
-            mDatabaseManager.closeConnection();
-        } catch( Exception e ) {
-            e.printStackTrace();
-        }
     }
 
     public void startParsing() {
         mDatabaseManager.openConnection();
+        mDatabaseManager.pushSqlQuery("USE capstone;");
 
         parseFileByLine();
         updateConditionsWithSentenceID();
