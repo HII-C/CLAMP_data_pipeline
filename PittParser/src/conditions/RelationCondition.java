@@ -12,19 +12,24 @@ public class RelationCondition implements ConditionIntf {
 
     // Data
     int mRecordId;
-    int mLeftIndex1;
-    int mLeftIndex2;
-    int mRightIndex1;
-    int mRightIndex2;
+    int mTargetIndex1;
+    int mTargetIndex2;
+    int mRelationIndex1;
+    int mRelationIndex2;
+    // mTargetType relates to the semantic type of the noun that the relation is targetting
+    String mTargetType;
+    // mRelationSemanticType relates to the semantic type of the relation, e.g., NEG
+    String mRelationSemanticType;
+    // mRelationType relates to the type of the relation relative to the target, e.g., NEG_Of
     String mRelationType;
-    String mSemanticType1;
-    String mSemanticType2;
     String mUnparsedFileName;
     
-    // mRelationText is derived from the text between mLeftIndex1 and mLeftIndex2
-    // mRelationStatement is derived from the text between mRightIndex1 and mRightIndex2
+    // mRelationTarget is derived from the text between mTargetIndex1 and mTargetIndex2.
+    // 		mRelationTarget is the text identified in the clinical notes that the relation is describing/targetting
+    // mRelationText is derived from the text between mRelationIndex1 and mRelationIndex2.
+    //		mRelationText is the text identified in the clinical notes that represents the relation
+    String mRelationTarget;
     String mRelationText;
-    String mRelationStatement;
     boolean mHasUpdatedRelationText = false;
 
     int mSentenceID1;
@@ -62,8 +67,8 @@ public class RelationCondition implements ConditionIntf {
             return;
         }
 
-        mLeftIndex1 = theIndex1;
-        mLeftIndex2 = theIndex2;
+        mTargetIndex1 = theIndex1;
+        mTargetIndex2 = theIndex2;
 
         // handle the "problem 172" grouped case here:
         String[] problemSplit = aParts[3].split(" ");
@@ -82,18 +87,18 @@ public class RelationCondition implements ConditionIntf {
             return;
         }
 
-        mRightIndex1 = theIndex1;
-        mRightIndex2 = theIndex2;
+        mRelationIndex1 = theIndex1;
+        mRelationIndex2 = theIndex2;
 
-        mSemanticType1 = aParts[5];
-        mSemanticType2 = ParsingUtils.splitRight(aParts[6], "semantic=");
-        if( mSemanticType2.equals("")) {
+        mRelationSemanticType = aParts[5];
+        mRelationType = ParsingUtils.splitRight(aParts[6], "semantic=");
+        if( mRelationType.equals("")) {
             printError("Semantic Type 2 parsing error: " + aParts[6]);
             return;
         }
         
-        mRelationText = updateText(mLeftIndex1, mLeftIndex2);
-        mRelationStatement = updateText(mRightIndex1, mRightIndex2);
+        mRelationTarget = updateText(mTargetIndex1, mTargetIndex2);
+        mRelationText = updateText(mRelationIndex1, mRelationIndex2);
         mHasUpdatedRelationText = true;
     }
 
@@ -151,8 +156,8 @@ public class RelationCondition implements ConditionIntf {
 
     @Override
     public void updateSentenceID( SentenceManager aSentenceManager ) {
-        Integer leftSentenceID = aSentenceManager.retrieveSentenceRangeMatch(mLeftIndex1, mLeftIndex2);
-        Integer rightSentenceID = aSentenceManager.retrieveSentenceRangeMatch(mRightIndex1, mRightIndex2);
+        Integer leftSentenceID = aSentenceManager.retrieveSentenceRangeMatch(mTargetIndex1, mTargetIndex2);
+        Integer rightSentenceID = aSentenceManager.retrieveSentenceRangeMatch(mRelationIndex1, mRelationIndex2);
 
         if( leftSentenceID == null || rightSentenceID == null || mParsingErrorOccurred ) {
             printError( "Error Updating Sentence ID");
