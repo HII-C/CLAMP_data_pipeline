@@ -75,7 +75,22 @@ public class Parser {
     }
 
     private void runSQLQueries() {
+        List<ConditionIntf> theOrderedConditions = new ArrayList<>();
+
+        // Other conditions require sentence being set first!
         for( ConditionIntf currCondition : mConditions ) {
+            if( currCondition instanceof SentenceCondition ) {
+                theOrderedConditions.add( currCondition );
+            }
+        }
+
+        for( ConditionIntf currCondition : mConditions ) {
+            if( !(currCondition instanceof SentenceCondition) ) {
+                theOrderedConditions.add( currCondition );
+            }
+        }
+
+        for( ConditionIntf currCondition : theOrderedConditions ) {
             // If there is an error with the condition, we throw and let the user handle the error!
             if( !currCondition.hasSQLGenerationCompletedSuccessfully() ) {
                 System.out.println("Terminating on sample: " + mRecordId);
