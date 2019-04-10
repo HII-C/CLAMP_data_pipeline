@@ -70,10 +70,13 @@ public class SentenceCondition implements ConditionIntf {
         mIndex1 = lIndex;
         mIndex2 = rIndex;
         
-        updateSentenceText();
+        if( !updateSentenceText() ) {
+            printError( "Error getting sentence text");
+            return;
+        }
     }
 
-    public void updateSentenceText() {
+    public boolean updateSentenceText() {
         String sentence = "";
         try {
             FileReader fileReader = new FileReader( mUnparsedFileName );
@@ -96,15 +99,15 @@ public class SentenceCondition implements ConditionIntf {
                 count++;
             }
 
-    		//System.out.println("Sentence: " + sentence);
             bufferedReader.close();
         }
         catch ( Exception e ) {
-            System.out.println("File read error: " + mUnparsedFileName);
+            return false;
         }
 
         mSentenceText = sentence;
         mHasSetSentenceText = true;
+        return true;
     }
 
     private void printError(String errorMessage) {
