@@ -126,7 +126,7 @@ public class RelationCondition implements ConditionIntf {
         }
         
         if (text == "") {
-        	System.out.println("Error in extracting text; returned empty string");
+        	printError("Error in extracting text; returned empty string");
         }
         return text;
     }
