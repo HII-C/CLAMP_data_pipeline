@@ -27,7 +27,7 @@ public class SentenceManager {
             }
 
             if( startIndexValid && endIndexValid ) {
-                resIndex = i + 1;
+                resIndex = i;
             }
         }
 
