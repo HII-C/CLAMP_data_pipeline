@@ -129,18 +129,20 @@ public class ConceptCondition implements ConditionIntf{
                                         "WHERE NOT EXISTS ( SELECT * FROM concept_semantic " +
                                         "WHERE concept_semantic.semantic_text = '" + mSemantic + "');";
 
-        String conceptAssertionQuery =  "INSERT INTO concept_assertion ( assertion_text ) " +
-                                        "SELECT '" + mAssertion + "' " +
-                                        "WHERE NOT EXISTS ( SELECT * FROM concept_assertion " +
-                                        "WHERE concept_assertion.assertion_text = '" + mAssertion + "');";
-
         String conceptQuery;
-        if( mAssertion == null ) {
+        if( mAssertion != null ) {
             conceptQuery =              "INSERT INTO concepts ( record_id, sentence_id, cui, c_start, c_end, text, semantic, assertion ) " +
                                         "SELECT " + mRecordId + "," + mSentenceId + ",'" + mConceptUID + "'," + mIndex1 + "," + mIndex2 + ",'" + mText + "', concept_semantic.semantic_id, concept_assertion.assertion_id " +
                                         "FROM concept_semantic, concept_assertion " +
                                         " WHERE concept_semantic.semantic_id= '" + mSemantic + "' " +
                                         "AND concept_assertion.assertion_id = '" + mAssertion + "';";
+
+            String conceptAssertionQuery =  "INSERT INTO concept_assertion ( assertion_text ) " +
+                                            "SELECT '" + mAssertion + "' " +
+                                            "WHERE NOT EXISTS ( SELECT * FROM concept_assertion " +
+                                            "WHERE concept_assertion.assertion_text = '" + mAssertion + "');";
+            theSQLQueries.add( conceptAssertionQuery );
+
         }
         else {
             conceptQuery =              "INSERT INTO concepts ( record_id, sentence_id, cui, c_start, c_end, text, semantic ) " +
@@ -150,7 +152,6 @@ public class ConceptCondition implements ConditionIntf{
         }
 
         theSQLQueries.add( conceptSemanticQuery );
-        theSQLQueries.add( conceptAssertionQuery );
         theSQLQueries.add( conceptQuery );
 
         return theSQLQueries;
