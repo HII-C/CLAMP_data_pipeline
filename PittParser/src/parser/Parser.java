@@ -59,10 +59,8 @@ public class Parser {
         // Connection test
         try {
             mDatabaseManager.openConnection();
-            System.out.println("Connected to database test~!");
-
+            mDatabaseManager.pushSqlQuery("USE capstone;");
             mDatabaseManager.closeConnection();
-            System.out.println("Disconnected from database test~!");
         } catch( Exception e ) {
             e.printStackTrace();
         }
