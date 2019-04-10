@@ -92,7 +92,9 @@ public class RelationCondition implements ConditionIntf {
         
         mRelationTarget = updateText(mTargetIndex1, mTargetIndex2);
         mRelationText = updateText(mRelationIndex1, mRelationIndex2);
-        mHasUpdatedRelationText = true;
+        if (mRelationTarget != "" && mRelationText != "") {
+        	mHasUpdatedRelationText = true;
+        }
     }
 
     private String updateText(int mIndex1, int mIndex2) {
