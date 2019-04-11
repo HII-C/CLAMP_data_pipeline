@@ -5,7 +5,7 @@ import os
 import subprocess
 
 BASE_DIR = "inputdata/"
-NUM_SUBDIRECTORIES = 2
+NUM_SUBDIRECTORIES = 50
 FILE_NAME_BASE = "batch_"
 
 def run_clamp_on_thread( subdirectory_name ):
