@@ -3,9 +3,11 @@
 import threading
 import os
 import subprocess
+import multiprocessing
 
 BASE_DIR = "../inputdata/"
-NUM_SUBDIRECTORIES = 50
+SUBD_MIN = 0
+SUBD_MAX = 4
 FILE_NAME_BASE = "batch_"
 
 def run_clamp_on_thread( subdirectory_name ):
@@ -15,13 +17,16 @@ def main():
     threads = []
 
     # loop through all the files
-    for x in range(0, NUM_SUBDIRECTORIES):
+    for x in range(SUBD_MIN, SUBD_MAX):
         folder = BASE_DIR + FILE_NAME_BASE + str(x)
-        run_clamp_on_thread(folder)
         threads.append( threading.Thread( target = run_clamp_on_thread, args = (folder,) ) )
 
     for thread in threads:
+        print("starting thread!")
         thread.start()
+
+    for thread in threads:
+        thread.join()
 
     print("Finished CLAMP!!")
 
