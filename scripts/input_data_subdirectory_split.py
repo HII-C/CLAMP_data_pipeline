@@ -2,7 +2,7 @@
 
 import os, os.path
 
-BASE_DIR = "inputdata/"
+BASE_DIR = "../inputdata/"
 NUM_SUBDIRECTORIES = 50
 FILE_NAME_BASE = "batch_"
 

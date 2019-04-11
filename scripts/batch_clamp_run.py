@@ -4,7 +4,7 @@ import threading
 import os
 import subprocess
 
-BASE_DIR = "inputdata/"
+BASE_DIR = "../inputdata/"
 NUM_SUBDIRECTORIES = 50
 FILE_NAME_BASE = "batch_"
 
@@ -18,9 +18,11 @@ def main():
     for x in range(0, NUM_SUBDIRECTORIES):
         folder = BASE_DIR + FILE_NAME_BASE + str(x)
         run_clamp_on_thread(folder)
-        threads.append( target = run_clamp_on_thread, args = (folder) )
+        threads.append( threading.Thread( target = run_clamp_on_thread, args = (folder,) ) )
 
     for thread in threads:
         thread.start()
 
     print("Finished CLAMP!!")
+
+main()
