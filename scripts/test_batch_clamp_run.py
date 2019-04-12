@@ -11,7 +11,7 @@ SUBD_MAX = 4
 FILE_NAME_BASE = "batch_"
 
 def run_clamp_on_thread( subdirectory_name ):
-    subprocess.Popen([ "../run_pitt_pipeline.sh", subdirectory_name ]) 
+    subprocess.Popen([ "../run_pitt_pipeline.sh", subdirectory_name, "&" ]) 
 
 def test_completion( processes ):
   checkIfComplete = True
