@@ -120,6 +120,7 @@ public class ConceptCondition implements ConditionIntf{
         public String tableName;
         public String queryData;
         public String queryCondition;
+        public String fromTable;
 
         public String queryForeignQuery;
     }
@@ -132,6 +133,7 @@ public class ConceptCondition implements ConditionIntf{
             newData.tableName = "semantic";
             newData.queryData = "concept_semantic.semantic_id";
             newData.queryCondition = "concept_semantic.semantic_id= '" + mSemantic + "' ";
+            newData.fromTable = "concept_semantic";
 
             newData.queryForeignQuery = "INSERT INTO concept_semantic ( semantic_text ) " +
                                         "SELECT '" + mSemantic + "' " +
@@ -146,6 +148,7 @@ public class ConceptCondition implements ConditionIntf{
             newData.tableName = "assertion";
             newData.queryData = "concept_assertion.assertion_id";
             newData.queryCondition = "concept_assertion.assertion_id = '" + mAssertion + "' ";
+            newData.fromTable = "concept_assertion";
 
             newData.queryForeignQuery = "INSERT INTO concept_assertion ( assertion_text ) " +
                                         "SELECT '" + mAssertion + "' " +
@@ -160,6 +163,7 @@ public class ConceptCondition implements ConditionIntf{
             newData.tableName = "cui";
             newData.queryData = "'" + mConceptUID + "'";
             newData.queryCondition = "";
+            newData.fromTable = "";
 
             newData.queryForeignQuery = null;
 
@@ -171,6 +175,7 @@ public class ConceptCondition implements ConditionIntf{
             newData.tableName = "text";
             newData.queryData = "'" + ParsingUtils.cleanInput(mText) + "'";
             newData.queryCondition = "";
+            newData.fromTable = "";
 
             newData.queryForeignQuery = null;
 
@@ -212,6 +217,7 @@ public class ConceptCondition implements ConditionIntf{
         StringBuilder additionalTables = new StringBuilder();
         StringBuilder additionalQueryData = new StringBuilder();
         StringBuilder additionalConditions = new StringBuilder();
+        StringBuilder additionalFromTables = new StringBuilder();
 
         for( int i = 0 ; i < theQueryData.size(); i++) {
             QueryData query = theQueryData.get(i);
@@ -227,13 +233,26 @@ public class ConceptCondition implements ConditionIntf{
             if( i != theQueryData.size() - 1) {
                 additionalTables.append(", ");
                 additionalQueryData.append(", ");
+
+                if( !query.fromTable.equals("") ){
+                    additionalFromTables.append(", ");
+                }
             }
+        }
+
+        if( !additionalFromTables.equals("") ) {
+            additionalFromTables = new StringBuilder( additionalTables.substring(0, additionalFromTables.length() - 2) );
         }
 
         // Now create the big query
         StringBuilder conceptQuery = new StringBuilder();
         conceptQuery.append( "INSERT INTO concepts( record_id, sentence_id, c_start, c_end, " + additionalTables + ") " );
         conceptQuery.append( "SELECT " + mRecordId + ", " + mSentenceId + "," + mIndex1 + ", " + mIndex2 + ( additionalQueryData.equals("") ? "" : ", ") + additionalQueryData + " ");
+
+        if( !additionalFromTables.equals("") ) {
+            conceptQuery.append( "FROM " + additionalFromTables + " ");
+        }
+
         conceptQuery.append( "WHERE " + additionalConditions );
         conceptQuery.append( ";" );
 
