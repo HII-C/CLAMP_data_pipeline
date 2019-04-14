@@ -17,7 +17,7 @@ for filename in os.listdir(OUTPUT_PATH):
 for x in range(0, NUM_SUBDIRECTORIES):
   input_path = INPUT_PATH + str(x)
   for filename in os.listdir(input_path):
-    if file_dict[filename] == True:
+    if file_dict[filename]:
       file_path = input_path + filename
       completed_file_path = COMPLETED_PATH + filename
       os.rename(file_path, completed_file_path)
