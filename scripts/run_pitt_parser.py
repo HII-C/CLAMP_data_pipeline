@@ -44,14 +44,14 @@ def run_parser_on_thread( cv ):
     input_file = INPUT_DIR + file_name
     output_file = OUTPUT_DIR + file_name
 
-    if( not os.path.isdir( input_file ) or not os.path.isdir( output_file ) ):
+    if( not os.path.isfile( input_file ) or not os.path.isfile( output_file ) ):
         print("File does not exist: " + file_name)
         return
 
     log_file = open( LOG_DIR + "log_" + file_name, "w+" )
     subprocess.call([ "java", "-jar", PARSER_JAR_DIR, DB_USERNAME, DB_PASS, OUTPUT_DIR + file_name, INPUT_DIR + file_name ], stdout=log_file)
 
-    print(file_name " has completed")
+    print(file_name + " has completed")
 
     run_parser_on_thread( cv )
 
