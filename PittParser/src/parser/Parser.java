@@ -27,6 +27,8 @@ public class Parser {
         String theOutputFile = args[2];
         String theInputFile = args[3];
 
+        System.out.println( "Parsing: " + theOutputFile );
+
         // FOR TESTING LOCALLY
         //String windows = "PittParser\\pitt_report_67016.txt";
         //String linuxShit = "../pitt_report_67016.txt";

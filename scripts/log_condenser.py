@@ -9,6 +9,5 @@ file_names.sort()
 
 with open( CONDENSED_FILE, "wb" ) as outfile:
     for file in file_names:
-        outfile.write( file + " Parsing \n\n" )
         with open( file, "rb" ) as infile:
             outfile.write( infile.read() )
