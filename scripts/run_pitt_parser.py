@@ -34,7 +34,7 @@ def run_parser_on_thread( cv ):
             cv.wait()
         file_name = thread_file
         thread_file = None
-        cv.notify()
+        cv.notify_all()
 
     if( parsing_done ):
         return
@@ -80,7 +80,7 @@ def parse():
                 cv.wait()
 
             thread_file = output_file
-            cv.notify()
+            cv.notify_all()
 
     print( "Parsing has completed" )
     parsing_done = True
