@@ -20,7 +20,7 @@ for filename in os.listdir(OUTPUT_PATH):
 
 # Check input files against the dictionary; if the input files are in the dictionary, move them to the completed folder so we do not process them again
 for x in range(0, NUM_SUBDIRECTORIES):
-  input_path = INPUT_PATH + str(x)
+  input_path = INPUT_PATH + str(x) + "/"
   for filename in os.listdir(input_path):
     if file_dict[filename]:
       file_path = input_path + filename
