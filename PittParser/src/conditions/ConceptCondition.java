@@ -257,6 +257,8 @@ public class ConceptCondition implements ConditionIntf{
         conceptQuery.append( "WHERE " + additionalConditions );
         conceptQuery.append( ";" );
 
+        System.out.println( conceptQuery.toString() );
+        System.out.println();
         theSQLQueries.add( conceptQuery.toString() );
 
         return theSQLQueries;
