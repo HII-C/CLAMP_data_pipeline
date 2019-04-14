@@ -45,7 +45,7 @@ CREATE table sentence_index (
 Create sentence_section table:
 CREATE table sentence_section (
     section_id tinyint UNSIGNED AUTO_INCREMENT,
-    section_text varchar(30) NOT NULL,
+    section_text text NOT NULL,
     PRIMARY KEY( section_id )
 );
 

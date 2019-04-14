@@ -21,11 +21,6 @@ public class Parser {
     private DatabaseManagerIntf mDatabaseManager;
 
     public static void main(String[] args) {
-        String workingDirectory = System.getProperty("user.dir");
-        System.out.println( "Current working directory: " + workingDirectory );
-
-        System.out.println( "These are the arguments: " + Arrays.toString( args ) );
-
         String userName = args[0];
         String password = args[1];
 
