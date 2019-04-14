@@ -159,18 +159,18 @@ public class ConceptCondition implements ConditionIntf{
             QueryData newData = new QueryData();
             newData.tableName = "cui";
             newData.queryData = "'" + mConceptUID + "'";
-            newData.queryCondition = null;
+            newData.queryCondition = "";
 
             newData.queryForeignQuery = null;
 
             res.add( newData );
         }
 
-        if( mConceptUID != null ) {
+        if( mText != null ) {
             QueryData newData = new QueryData();
             newData.tableName = "text";
-            newData.queryData = mText;
-            newData.queryCondition = null;
+            newData.queryData = "'" + ParsingUtils.cleanInput(mText) + "'";
+            newData.queryCondition = "";
 
             newData.queryForeignQuery = null;
 
@@ -216,7 +216,7 @@ public class ConceptCondition implements ConditionIntf{
         for( int i = 0 ; i < theQueryData.size(); i++) {
             QueryData query = theQueryData.get(i);
 
-            if( i != 0 ) {
+            if( i != 0 && query.queryCondition != null ) {
                 additionalConditions.append("AND ");
             }
 
