@@ -132,7 +132,7 @@ public class ConceptCondition implements ConditionIntf{
             QueryData newData = new QueryData();
             newData.tableName = "semantic";
             newData.queryData = "concept_semantic.semantic_id";
-            newData.queryCondition = "concept_semantic.semantic_id= '" + mSemantic + "' ";
+            newData.queryCondition = "concept_semantic.semantic_text= '" + mSemantic + "' ";
             newData.fromTable = "concept_semantic";
 
             newData.queryForeignQuery = "INSERT INTO concept_semantic ( semantic_text ) " +
@@ -147,7 +147,7 @@ public class ConceptCondition implements ConditionIntf{
             QueryData newData = new QueryData();
             newData.tableName = "assertion";
             newData.queryData = "concept_assertion.assertion_id";
-            newData.queryCondition = "concept_assertion.assertion_id = '" + mAssertion + "' ";
+            newData.queryCondition = "concept_assertion.assertion_text = '" + mAssertion + "' ";
             newData.fromTable = "concept_assertion";
 
             newData.queryForeignQuery = "INSERT INTO concept_assertion ( assertion_text ) " +
@@ -257,8 +257,6 @@ public class ConceptCondition implements ConditionIntf{
         conceptQuery.append( "WHERE " + additionalConditions );
         conceptQuery.append( ";" );
 
-        System.out.println( conceptQuery.toString() );
-        System.out.println();
         theSQLQueries.add( conceptQuery.toString() );
 
         return theSQLQueries;
