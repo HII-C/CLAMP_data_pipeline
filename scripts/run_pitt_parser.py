@@ -66,6 +66,11 @@ def parse():
 
     output_file_list = os.listdir( OUTPUT_DIR )
     for output_file in output_file_list:
+        if( not output_file.endswith(".txt") ):
+            continue
+
+        print( "Parsing file: " + output_file )
+
         with cv:
             while( thread_file != None ):
                 cv.wait()
@@ -73,6 +78,7 @@ def parse():
             thread_file = output_file
             cv.notify()
 
+    print( "Parsing has completed" )
     parsing_done = True
     cv.notify_all()
 
