@@ -98,6 +98,7 @@ def cleanLogs():
     subprocess.call(["mkdir", "../parselogs"])
 
 def main():
+    cleanLogs()
     parse()
 
 main()

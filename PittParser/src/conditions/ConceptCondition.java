@@ -216,7 +216,7 @@ public class ConceptCondition implements ConditionIntf{
         for( int i = 0 ; i < theQueryData.size(); i++) {
             QueryData query = theQueryData.get(i);
 
-            if( i != 0 && query.queryCondition != null ) {
+            if( i != 0 && !query.queryCondition.equals("") ) {
                 additionalConditions.append("AND ");
             }
 
