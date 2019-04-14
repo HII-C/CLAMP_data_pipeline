@@ -4,7 +4,7 @@ import subprocess
 import sys
 
 BASE_DIR = "../"
-INPUT_DIR = BASE_DIR + "inputdata/"
+INPUT_DIR = BASE_DIR + "inputdata/completed/"
 OUTPUT_DIR = BASE_DIR + "outputdata/"
 PARSER_JAR_DIR = BASE_DIR + "PittParser/out/artifacts/CLAMP_data_pipeline_jar/CLAMP_data_pipeline.jar"
 LOG_DIR = BASE_DIR + "parselogs/"
@@ -18,7 +18,6 @@ DB_PASS = sys.argv[2]
 
 # Threading vars
 MAX_THREAD_COUNT = 6
-curr_thread_count = 0
 
 # danger variables!
 thread_file = None
