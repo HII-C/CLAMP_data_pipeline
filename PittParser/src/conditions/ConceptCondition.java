@@ -233,7 +233,7 @@ public class ConceptCondition implements ConditionIntf{
         // Now create the big query
         StringBuilder conceptQuery = new StringBuilder();
         conceptQuery.append( "INSERT INTO concepts( record_id, sentence_id, c_start, c_end, " + additionalTables + ") " );
-        conceptQuery.append( "SELECT " + mRecordId + ", " + mSentenceId + "," + mIndex1 + ", " + mIndex2 + additionalQueryData + " ");
+        conceptQuery.append( "SELECT " + mRecordId + ", " + mSentenceId + "," + mIndex1 + ", " + mIndex2 + ( additionalQueryData.equals("") ? "" : ", ") + additionalQueryData + " ");
         conceptQuery.append( "WHERE " + additionalConditions );
         conceptQuery.append( ";" );
 
