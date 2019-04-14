@@ -4,9 +4,12 @@ import parser.ParsingUtils;
 import parser.SentenceManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ConceptCondition implements ConditionIntf{
+
+    String[] mParts;
 
     // Data
     int mRecordId;
@@ -31,6 +34,8 @@ public class ConceptCondition implements ConditionIntf{
     // Expected input
     // e.g. NamedEntity     42      62      semantic=problem        assertion=present      ne=Difficulty breathing
     private void parseParts(String[] aParts, int aRecordId) {
+        mParts = aParts;
+
         // validate that this entry is correct
         if( !aParts[0].equals("NamedEntity") ) {
             printError("Type is incorrect: " + aParts[0]);
@@ -109,7 +114,7 @@ public class ConceptCondition implements ConditionIntf{
 
         // suppress output if a result of temporal concept
         if( !mHasFailedFromTemporal ) {
-            System.out.println("RID: " + mRecordId + " - Concepts Condition - " + errorMessage);
+            System.out.println("RID: " + mRecordId + " - Concepts Condition - Arguments: " + Arrays.toString( mParts ) + " - " +  errorMessage);
         }
     }
 

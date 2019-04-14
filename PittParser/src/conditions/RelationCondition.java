@@ -6,9 +6,12 @@ import parser.SentenceManager;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RelationCondition implements ConditionIntf {
+
+    String[] mParts;
 
     // Data
     int mRecordId;
@@ -47,6 +50,8 @@ public class RelationCondition implements ConditionIntf {
     // e.g. Relation        175     187     problem 172     174     NEG     semantic=NEG_Of
     // Note that "problem 172" might be grouped since there's only one space to delimit the two
     private void parseParts(String[] aParts, int aRecordId) {
+        mParts = aParts;
+
         if( !aParts[0].equals("Relation") ) {
             printError("Type is incorrect: " + aParts[0]);
             return;
@@ -135,7 +140,7 @@ public class RelationCondition implements ConditionIntf {
     
     private void printError(String errorMessage) {
         mParsingErrorOccurred = true;
-        System.out.println("RID: " + mRecordId + " - Relation Condition - " + errorMessage);
+        System.out.println("RID: " + mRecordId + " - Relation Condition - Arguments: " + Arrays.toString( mParts ) + " - " + errorMessage);
     }
 
     // ConditionIntf OVERRIDES

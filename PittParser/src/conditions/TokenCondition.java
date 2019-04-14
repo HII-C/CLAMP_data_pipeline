@@ -4,9 +4,12 @@ import parser.ParsingUtils;
 import parser.SentenceManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TokenCondition implements ConditionIntf{
+
+    String[] mParts;
 
     // Data
     int mRecordId;
@@ -21,6 +24,8 @@ public class TokenCondition implements ConditionIntf{
     // ConditionIntf
 
     public TokenCondition(String[] aParts, int aRecordId) {
+        mParts = aParts;
+
         parseParts( aParts, aRecordId );
     }
 
@@ -57,7 +62,7 @@ public class TokenCondition implements ConditionIntf{
 
     private void printError(String errorMessage) {
         mParsingErrorOccurred = true;
-        System.out.println("RID: " + mRecordId + " - Token Condition - " + errorMessage);
+        System.out.println("RID: " + mRecordId + " - Token Condition - Arguments: " + Arrays.toString( mParts ) + " - " + errorMessage);
     }
 
     @Override

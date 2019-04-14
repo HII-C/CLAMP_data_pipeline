@@ -64,7 +64,7 @@ public class DatabaseManager implements DatabaseManagerIntf{
 		} catch (Exception e) {
 			if( !(e instanceof com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException) ) {
 				System.out.println("\n\n" + aQuery + "\n");
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 
 				System.exit(0);
 			}

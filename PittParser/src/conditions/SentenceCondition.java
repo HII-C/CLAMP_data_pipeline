@@ -7,9 +7,12 @@ import parser.ParsingUtils;
 import parser.SentenceManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SentenceCondition implements ConditionIntf {
+
+    String[] mParts;
 
     // Data
     int mRecordId;
@@ -26,6 +29,8 @@ public class SentenceCondition implements ConditionIntf {
     // Methods
 
     public SentenceCondition( String[] aParts, int aRecordId, int aSentenceId, String aUnparsedFileName ) {
+        mParts = aParts;
+
         mUnparsedFileName = aUnparsedFileName;
         parseParts( aParts, aRecordId, aSentenceId );
     }
@@ -112,7 +117,7 @@ public class SentenceCondition implements ConditionIntf {
 
     private void printError(String errorMessage) {
         mParsingErrorOccurred = true;
-        System.out.println("RID: " + mRecordId + " - Sentence Condition - " + errorMessage);
+        System.out.println("RID: " + mRecordId + " - Sentence Condition - Arguments: " + Arrays.toString( mParts ) + " - " + errorMessage);
     }
 
     // ConditionIntf OVERRIDES
