@@ -32,7 +32,7 @@ atexit.register( condenseLogs )
 
 def run_parser_on_thread( cv ):
     global thread_file
-    global parsing_donecd ..
+    global parsing_done
 
     file_name = None
 
