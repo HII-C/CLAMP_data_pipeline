@@ -110,7 +110,7 @@ public class SentenceCondition implements ConditionIntf {
             return false;
         }
 
-        mSentenceText = sentence;
+        mSentenceText = ParsingUtils.cleanInput( sentence );
         mHasSetSentenceText = true;
         return true;
     }

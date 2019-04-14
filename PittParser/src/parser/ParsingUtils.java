@@ -42,6 +42,21 @@ public class ParsingUtils{
         }
     }
 
+    // Cleans up a block of text so it doesn't mess up the sql query
+    public static String cleanInput( String input ) {
+        StringBuilder res = new StringBuilder();
+        for( int i = 0 ; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if( c == '\'' ) {
+                res.append( '\'' );
+            }
+
+            res.append(c);
+        }
+
+        return res.toString();
+    }
+
     // Splits String to parts by number of spaces in each space group
     // Ex. "a   b   c  d  e f g" where n = 3
     // @Returns ["a", "b", "c  d..."]

@@ -95,10 +95,13 @@ public class RelationCondition implements ConditionIntf {
             return;
         }
         
-        mRelationTarget = updateText(mTargetIndex1, mTargetIndex2);
-        mRelationText = updateText(mRelationIndex1, mRelationIndex2);
+        mRelationTarget = ParsingUtils.cleanInput( updateText(mTargetIndex1, mTargetIndex2) );
+        mRelationText = ParsingUtils.cleanInput( updateText(mRelationIndex1, mRelationIndex2) );
         if (mRelationTarget != "" && mRelationText != "") {
         	mHasUpdatedRelationText = true;
+        } else {
+            printError( "Relation target or Relation text not updated successfully" );
+            return;
         }
     }
 
@@ -125,7 +128,6 @@ public class RelationCondition implements ConditionIntf {
                 count++;
             }
 
-//    		System.out.println("Sentence: " + sentence);
             bufferedReader.close();
         }
         catch ( Exception e ) {
