@@ -18,13 +18,9 @@ public class SentenceManager {
         for(int i = 0 ; i < sentenceRanges.size(); i++) {
             int[] currRange = sentenceRanges.get(i);
 
+            // This defaults to the rightmost sentence that the range matches with!
             boolean startIndexValid = startIndex >= currRange[0] && startIndex <= currRange[1];
             boolean endIndexValid = endIndex >= currRange[0] && endIndex <= currRange[1];
-
-            if( (startIndexValid && !endIndexValid) || (!startIndexValid && endIndexValid)) {
-                System.out.println("Sentence Manager Error: Entity may be a part of more than one index range");
-                return null;
-            }
 
             if( startIndexValid && endIndexValid ) {
                 resIndex = i;
