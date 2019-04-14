@@ -2,6 +2,7 @@ import threading
 import os
 import subprocess
 import sys
+import atexit
 
 BASE_DIR = "../"
 INPUT_DIR = BASE_DIR + "inputdata/completed/"
@@ -23,9 +24,15 @@ MAX_THREAD_COUNT = 6
 thread_file = None
 parsing_done = False
 
+# Condense the logs on exit
+def condenseLogs():
+    subprocess.call(["python", "log_condenser.py"])
+
+atexit.register( condenseLogs )
+
 def run_parser_on_thread( cv ):
     global thread_file
-    global parsing_done
+    global parsing_donecd ..
 
     file_name = None
 
@@ -86,4 +93,9 @@ def parse():
     parsing_done = True
     cv.notify_all()
 
-parse()
+def cleanLogs():
+    subprocess.call(["rm", "-rf", "../parselogs"])
+    subprocess.call(["mkdir", "../parselogs"])
+
+def main():
+    parse()
