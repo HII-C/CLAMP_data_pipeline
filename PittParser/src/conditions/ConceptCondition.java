@@ -229,6 +229,7 @@ public class ConceptCondition implements ConditionIntf{
             additionalTables.append(query.tableName);
             additionalQueryData.append(query.queryData);
             additionalConditions.append(query.queryCondition);
+            additionalFromTables.append(query.fromTable);
 
             if( i != theQueryData.size() - 1) {
                 additionalTables.append(", ");
@@ -241,7 +242,7 @@ public class ConceptCondition implements ConditionIntf{
         }
 
         if( !additionalFromTables.equals("") ) {
-            additionalFromTables = new StringBuilder( additionalTables.substring(0, additionalFromTables.length() - 2) );
+            additionalFromTables = new StringBuilder( additionalFromTables.substring(0, additionalFromTables.length() - 2) );
         }
 
         // Now create the big query
