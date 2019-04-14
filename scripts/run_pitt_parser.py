@@ -99,3 +99,5 @@ def cleanLogs():
 
 def main():
     parse()
+
+main()
