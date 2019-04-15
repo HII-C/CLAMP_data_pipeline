@@ -23,6 +23,9 @@ for x in range(0, NUM_SUBDIRECTORIES):
   input_path = INPUT_PATH + str(x) + "/"
   for filename in os.listdir(input_path):
     if file_dict.get(filename):
+      print("Moving file " + filename + " to the " + COMPLETED_PATH + " folder")
       file_path = input_path + filename
       completed_file_path = COMPLETED_PATH + filename
       os.rename(file_path, completed_file_path)
+
+print("Finished moving all files")

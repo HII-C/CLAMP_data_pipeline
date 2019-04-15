@@ -27,11 +27,13 @@ def test_completion( processes ):
     threading.Timer(30.0, test_completion( processes ))
 
 def main():
+    subprocess.Popen(["python", "move_completed.py"]).wait()
+
     processes = []
 
     # loop through all the files
     for x in range(SUBD_MIN, SUBD_MAX):
-        folder = BASE_DIR + FILE_NAME_BASE + str(x)
+        folder = BASE_DIR + FILE_NAME_BASE + str(x) + "/"
         processes.append(subprocess.Popen(["../run_pitt_pipeline.sh", folder, OUTPUT_FOLDER]))
 
     test_completion( processes )
